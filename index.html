@@ -3,29 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>inferno</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>SYSTEM :: INFERNO</title>
+    <!-- Hacker Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #00f3ff; /* Cyber Cyan */
+            --secondary: #ff0055; /* Glitch Red */
+            --bg-overlay: rgba(0, 0, 0, 0.6);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: crosshair; /* Hacker cursor */
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             background: #000;
-            color: #fff;
+            color: var(--primary);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
             position: relative;
         }
 
-        /* Background Image - No Blur */
-        body::before {
-            content: '';
+        /* --- BACKGROUND LAYERS --- */
+        
+        /* 1. The Anime Image */
+        .bg-image {
             position: fixed;
             top: 0;
             left: 0;
@@ -34,52 +43,57 @@
             background-image: url('https://images2.alphacoders.com/100/thumb-1920-1002619.png');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.4;
-            z-index: 0;
+            z-index: -3;
+            filter: contrast(1.1) brightness(0.7) grayscale(0.3);
         }
 
-        /* Starfield */
-        #stars {
+        /* 2. Matrix Canvas */
+        canvas#matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -2;
+            opacity: 0.2;
+        }
+
+        /* 3. CRT Scanlines & Vignette */
+        .scanlines {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            z-index: 100; /* On top of everything */
             pointer-events: none;
-            z-index: 1;
+            animation: flicker 0.15s infinite;
         }
 
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: twinkle 3s infinite alternate;
-        }
-
-        @keyframes twinkle {
-            from {opacity: 0.3;}
-            to {opacity: 1;}
-        }
-
-        /* Floating Particles */
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.9) 100%);
+            z-index: 99;
             pointer-events: none;
-            animation: floatParticle linear infinite;
         }
 
-        @keyframes floatParticle {
-            from {transform: translateY(0);}
-            to {transform: translateY(-100vh);}
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1.0; }
+            100% { opacity: 0.9; }
         }
 
-        /* Main Container */
+        /* --- LAYOUT --- */
         .container {
             position: relative;
             z-index: 10;
@@ -88,24 +102,56 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 60px;
+            padding: 0 80px;
         }
 
-        /* Left Section - Profile */
+        /* --- PROFILE SECTION (LEFT) --- */
         .left-section {
             display: flex;
             flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 15px;
+        }
+
+        /* Spinning HUD Ring */
+        .profile-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed var(--primary);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+        }
+
+        .profile-wrapper::after {
+            content: '';
+            position: absolute;
+            width: 110%;
+            height: 110%;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 50%;
+            border-top: transparent;
+            border-bottom: transparent;
+            animation: spin-reverse 5s linear infinite;
         }
 
         .profile-pic {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            border: 2px solid var(--primary);
+            position: relative;
+            z-index: 2;
         }
 
         .profile-pic img {
@@ -115,165 +161,191 @@
         }
 
         .profile-name {
-            font-size: 32px;
-            font-weight: 400;
+            font-size: 42px;
+            font-weight: 700;
             color: #fff;
-            animation: glow-pulse 5s ease-in-out infinite;
+            text-shadow: 2px 2px var(--secondary), -2px -2px var(--primary);
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
-        @keyframes glow-pulse {
-            0%, 40%, 100% { 
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-                opacity: 0.6;
-            }
-            50%, 90% { 
-                text-shadow: 
-                    0 0 20px rgba(255, 255, 255, 0.8),
-                    0 0 40px rgba(255, 255, 255, 0.6),
-                    0 0 60px rgba(255, 255, 255, 0.4);
-                opacity: 1;
-            }
+        .status-text {
+            font-size: 14px;
+            color: var(--primary);
+            opacity: 0.8;
+            margin-top: -10px;
+        }
+        .status-text::before {
+            content: 'STATUS: ';
+            font-weight: bold;
         }
 
-        /* Center Section - Icons */
+        /* --- ICONS (CENTER) --- */
         .center-section {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            gap: 25px;
-            align-items: center;
+            gap: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 30px;
+            border: 1px solid var(--primary);
+            backdrop-filter: blur(5px);
+            /* Angled corners tech look */
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 95% 100%, 0 100%, 0 30%);
         }
 
         .icon-link {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 22px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 20px;
             text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
+            transition: 0.2s;
+            border: 1px solid transparent;
         }
 
         .icon-link:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.15);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
-            animation: iconGlow 1.5s infinite alternate;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+            transform: translateY(-5px);
+            border: 1px solid var(--primary);
+            background: rgba(0, 243, 255, 0.1);
         }
 
-        @keyframes iconGlow {
-            0% { box-shadow: 0 0 15px rgba(255,255,255,0.3);}
-            50% { box-shadow: 0 0 30px rgba(255,255,255,0.6);}
-            100% { box-shadow: 0 0 45px rgba(255,255,255,0.9);}
-        }
-
-        .icon-link i {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-
-        /* Ripple Effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            background: rgba(255,255,255,0.4);
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* Right Section - Time */
+        /* --- TIME & DATA (RIGHT) --- */
         .right-section {
-            position: absolute;
-            top: 40px;
-            right: 60px;
             text-align: right;
+            border-right: 2px solid var(--primary);
+            padding-right: 20px;
         }
 
         .time-display {
-            font-size: 32px;
-            font-weight: 300;
+            font-size: 48px;
             color: #fff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 10px var(--primary);
+            line-height: 1;
+        }
+
+        .date-display {
+            font-size: 16px;
+            color: var(--primary);
             letter-spacing: 2px;
-            transition: opacity 0.3s ease;
+            margin-bottom: 5px;
         }
 
         .greeting {
-            font-size: 18px;
-            margin-top: 5px;
-            font-weight: 300;
+            font-size: 20px;
             color: #fff;
-            text-shadow: 0 0 8px rgba(255,255,255,0.3);
+            opacity: 0.8;
+            margin-top: 10px;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 0 40px;
-            }
-            
-            .center-section {
-                gap: 20px;
-            }
+        /* --- DECORATIVE HUD ELEMENTS --- */
+        .hud-line {
+            position: absolute;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        .top-line { top: 40px; left: 40px; right: 40px; height: 1px; }
+        .bottom-line { bottom: 40px; left: 40px; right: 40px; height: 1px; }
+        
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+        }
+        .tl { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
+        .tr { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
+        .bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
+        .br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+
+        /* Glitch Animation Class */
+        .glitch-effect {
+            animation: glitch-anim 2s infinite;
         }
 
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Mobile adjustments */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 justify-content: center;
-                padding: 0 30px;
                 gap: 50px;
+                padding: 0;
             }
-
-            .left-section {
-                flex-direction: column;
-            }
-
-            .right-section {
-                position: static;
-            }
-
             .center-section {
+                position: relative;
+                bottom: 0;
+                transform: none;
+                left: 0;
                 flex-wrap: wrap;
                 justify-content: center;
+                width: 90%;
+            }
+            .right-section {
+                text-align: center;
+                border-right: none;
+                padding-right: 0;
+            }
+            .left-section {
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Starfield Canvas -->
-    <div id="stars"></div>
 
-    <!-- Floating Particles -->
-    <div id="particles"></div>
+    <!-- Background Elements -->
+    <div class="bg-image"></div>
+    <canvas id="matrix"></canvas>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
 
-    <!-- Main Container -->
+    <!-- HUD Borders -->
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div class="hud-line top-line"></div>
+    <div class="hud-line bottom-line"></div>
+
     <div class="container">
         
-        <!-- Left Section - Profile -->
+        <!-- Left: Profile -->
         <div class="left-section">
-            <div class="profile-pic">
-                <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" alt="Profile">
+            <div class="profile-wrapper">
+                <div class="profile-pic">
+                    <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" alt="Profile">
+                </div>
             </div>
-            <div class="profile-name">inferno</div>
+            <div style="text-align: center;">
+                <div class="profile-name" data-value="INFERNO">INFERNO</div>
+                <div class="status-text">ONLINE // SYSTEM SECURE</div>
+            </div>
         </div>
 
-        <!-- Center Section - Icons -->
+        <!-- Center: Icons (Moved to bottom center for cleaner look) -->
         <div class="center-section">
-            <a href="https://discord.com/users/421005145980141580" title="Discord"><i class="fa-brands fa-discord"></i></a>
+            <!-- Note: Wrapped Discord icon in 'a' tag properly -->
+            <a href="https://discord.com/users/421005145980141580" class="icon-link" title="Discord"><i class="fa-brands fa-discord"></i></a>
             <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq?si=1433159ede0544f2" class="icon-link" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
             <a href="https://github.com/inf3rno1" class="icon-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
             <a href="mailto:ryzenfelixx@gmail.com" class="icon-link" title="Email"><i class="fa-solid fa-envelope"></i></a>
@@ -284,98 +356,116 @@
             <a href="#" class="icon-link" title="PayPal"><i class="fa-brands fa-paypal"></i></a>
             <a href="#" class="icon-link" title="Steam"><i class="fa-brands fa-steam"></i></a>
             <a href="#" class="icon-link" title="Ethereum"><i class="fa-brands fa-ethereum"></i></a>
-            <a href="#" class="icon-link" title="Menu"><i class="fa-solid fa-bars"></i></a>
+        </div>
+
+        <!-- Right: Time -->
+        <div class="right-section">
+            <div class="date-display" id="date">2023-10-27</div>
+            <div class="time-display" id="time">00:00:00</div>
+            <div class="greeting" id="greeting">INITIALIZING...</div>
         </div>
 
     </div>
 
-    <!-- Right Section - Time + Greeting -->
-    <div class="right-section">
-        <div class="time-display" id="time">00:00:00</div>
-        <div class="greeting" id="greeting">Hello</div>
-    </div>
-
-    <!-- Background Audio -->
-    <audio id="bg-music" src="your-song.mp3" autoplay loop></audio>
-
     <script>
-        // --- Time & Greeting ---
+        // --- 1. HACKER TEXT EFFECT (Letters scramble on hover) ---
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
+        
+        document.querySelector(".profile-name").onmouseover = event => {
+            let iterations = 0;
+            const interval = setInterval(() => {
+                event.target.innerText = event.target.innerText
+                    .split("")
+                    .map((letter, index) => {
+                        if(index < iterations) {
+                            return event.target.dataset.value[index];
+                        }
+                        return letters[Math.floor(Math.random() * 26)];
+                    })
+                    .join("");
+                
+                if(iterations >= event.target.dataset.value.length){ 
+                    clearInterval(interval);
+                }
+                
+                iterations += 1 / 3;
+            }, 30);
+        }
+
+        // --- 2. MATRIX RAIN EFFECT ---
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const matrixChars = "01"; // Binary rain
+        const fontSize = 14;
+        const columns = canvas.width/fontSize;
+        const drops = [];
+
+        for(let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            // Black with slight opacity for trail effect
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#0F0"; // Green text (classic matrix) or #0ff for Cyan
+            ctx.font = fontSize + "px monospace";
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                // Cyan color for the rain
+                ctx.fillStyle = "rgba(0, 243, 255, 0.5)"; 
+                ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+                if(drops[i]*fontSize > canvas.height && Math.random() > 0.975)
+                    drops[i] = 0;
+                
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+
+        // --- 3. TIME & DATE ---
         function updateTime() {
             const now = new Date();
+            
+            // Time
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeEl = document.getElementById('time');
-            timeEl.style.opacity = 0;
-            setTimeout(() => {
-                timeEl.textContent = `${hours}:${minutes}:${seconds}`;
-                timeEl.style.opacity = 1;
-            }, 100);
+            const milliseconds = String(Math.floor(now.getMilliseconds() / 10)).padStart(2, '0'); // Cool fake precise time
+            
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Date
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', options).toUpperCase();
 
+            // Greeting
             const greetingEl = document.getElementById('greeting');
-            if(now.getHours() < 12) greetingEl.textContent = 'Good Morning';
-            else if(now.getHours() < 18) greetingEl.textContent = 'Good Afternoon';
-            else greetingEl.textContent = 'Good Evening';
+            const h = now.getHours();
+            let greetText = "SYSTEM STANDBY";
+            if(h < 12) greetText = "GOOD MORNING";
+            else if(h < 18) greetText = "GOOD AFTERNOON";
+            else greetText = "GOOD EVENING";
+            
+            // Only update text if it changes to prevent typewriter reset
+            if(greetingEl.textContent !== greetText && greetingEl.textContent !== "INITIALIZING...") {
+                greetingEl.textContent = greetText;
+            } else if (greetingEl.textContent === "INITIALIZING...") {
+                setTimeout(() => greetingEl.textContent = greetText, 2000);
+            }
         }
-        updateTime();
-        setInterval(updateTime, 1000);
-
-        // --- Stars ---
-        const starCount = 100;
-        const starsContainer = document.getElementById('stars');
-        const stars = [];
-        for(let i=0;i<starCount;i++){
-            const star = document.createElement('div');
-            star.classList.add('star');
-            star.style.width = star.style.height = Math.random()*2 + 1 + 'px';
-            star.style.top = Math.random()*100 + 'vh';
-            star.style.left = Math.random()*100 + 'vw';
-            starsContainer.appendChild(star);
-            stars.push(star);
-        }
-
-        // --- Floating Particles ---
-        const particleCount = 50;
-        const particlesContainer = document.getElementById('particles');
-        const particles = [];
-        for(let i=0;i<particleCount;i++){
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            particle.style.left = Math.random()*100 + 'vw';
-            particle.style.top = Math.random()*100 + 'vh';
-            particle.style.animationDuration = 5 + Math.random()*5 + 's';
-            particlesContainer.appendChild(particle);
-            particles.push(particle);
-        }
-
-        // --- Icon Ripple Effect ---
-        const icons = document.querySelectorAll('.icon-link');
-        icons.forEach(icon => {
-            icon.addEventListener('click', e => {
-                const ripple = document.createElement('span');
-                ripple.classList.add('ripple');
-                ripple.style.left = e.offsetX + 'px';
-                ripple.style.top = e.offsetY + 'px';
-                icon.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
-
-        // --- Mouse Parallax ---
-        document.addEventListener('mousemove', e => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-
-            stars.forEach(star => {
-                star.style.transform = `translate(${x/10}px, ${y/10}px)`;
-            });
-
-            particles.forEach(p => {
-                p.style.transform = `translate(${x/20}px, ${y/20}px)`;
-            });
-
-            document.querySelector('.container').style.transform = `translate(${x/30}px, ${y/30}px)`;
-        });
+        setInterval(updateTime, 100); // Faster refresh for milliseconds feel
     </script>
 </body>
 </html>
