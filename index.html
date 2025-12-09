@@ -7,12 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * {margin:0; padding:0; box-sizing:border-box;}
         body {
             font-family: 'Poppins', sans-serif;
             background: #000;
@@ -23,237 +18,62 @@
             position: relative;
         }
 
-        /* Background Image - No Blur */
-        body::before {
-            content: '';
+        /* Background Video */
+        #bg-video {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://images2.alphacoders.com/100/thumb-1920-1002619.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.4;
+            object-fit: cover;
             z-index: 0;
         }
 
         /* Starfield */
-        #stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: twinkle 3s infinite alternate;
-        }
-
-        @keyframes twinkle {
-            from {opacity: 0.3;}
-            to {opacity: 1;}
-        }
+        #stars {position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;}
+        .star {position:absolute; background:white; border-radius:50%; opacity:0.6; animation:twinkle 3s infinite alternate;}
+        @keyframes twinkle {from {opacity:0.3;} to {opacity:1;}}
 
         /* Floating Particles */
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            from {transform: translateY(0);}
-            to {transform: translateY(-100vh);}
-        }
+        .particle {position:absolute; width:3px; height:3px; background: rgba(255,255,255,0.2); border-radius:50%; pointer-events:none; animation:floatParticle linear infinite;}
+        @keyframes floatParticle {from {transform: translateY(0);} to {transform: translateY(-100vh);}}
 
         /* Main Container */
-        .container {
-            position: relative;
-            z-index: 10;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 60px;
-        }
+        .container {position: relative; z-index:10; height:100vh; width:100%; display:flex; align-items:center; justify-content:space-between; padding:0 60px;}
 
         /* Left Section - Profile */
-        .left-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-        }
-
-        .profile-pic img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-name {
-            font-size: 32px;
-            font-weight: 400;
-            color: #fff;
-            animation: glow-pulse 5s ease-in-out infinite;
-        }
-
+        .left-section {display:flex; flex-direction:column; align-items:center; gap:15px;}
+        .profile-pic {width:120px; height:120px; border-radius:50%; overflow:hidden; border:2px solid rgba(255,255,255,0.3); box-shadow:0 0 20px rgba(255,255,255,0.2);}
+        .profile-pic img {width:100%; height:100%; object-fit:cover;}
+        .profile-name {font-size:32px; font-weight:400; color:#fff; animation:glow-pulse 5s ease-in-out infinite;}
         @keyframes glow-pulse {
-            0%, 40%, 100% { 
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-                opacity: 0.6;
-            }
-            50%, 90% { 
-                text-shadow: 
-                    0 0 20px rgba(255, 255, 255, 0.8),
-                    0 0 40px rgba(255, 255, 255, 0.6),
-                    0 0 60px rgba(255, 255, 255, 0.4);
-                opacity: 1;
-            }
+            0%,40%,100% {text-shadow:0 0 5px rgba(255,255,255,0.3); opacity:0.6;}
+            50%,90% {text-shadow:0 0 20px rgba(255,255,255,0.8),0 0 40px rgba(255,255,255,0.6),0 0 60px rgba(255,255,255,0.4); opacity:1;}
         }
 
         /* Center Section - Icons */
-        .center-section {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .icon-link {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 22px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .icon-link:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.15);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
-            animation: iconGlow 1.5s infinite alternate;
-        }
-
-        @keyframes iconGlow {
-            0% { box-shadow: 0 0 15px rgba(255,255,255,0.3);}
-            50% { box-shadow: 0 0 30px rgba(255,255,255,0.6);}
-            100% { box-shadow: 0 0 45px rgba(255,255,255,0.9);}
-        }
-
-        .icon-link i {
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-
-        /* Ripple Effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            background: rgba(255,255,255,0.4);
-        }
-
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
+        .center-section {display:flex; gap:25px; align-items:center;}
+        .icon-link {width:50px; height:50px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-size:22px; text-decoration:none; transition:all 0.3s ease; border:1px solid rgba(255,255,255,0.2); box-shadow:0 0 15px rgba(255,255,255,0.2); position:relative; overflow:hidden;}
+        .icon-link:hover {background: rgba(255,255,255,0.15); transform: scale(1.15); box-shadow:0 0 30px rgba(255,255,255,0.5); animation:iconGlow 1.5s infinite alternate;}
+        @keyframes iconGlow {0% {box-shadow:0 0 15px rgba(255,255,255,0.3);} 50% {box-shadow:0 0 30px rgba(255,255,255,0.6);} 100% {box-shadow:0 0 45px rgba(255,255,255,0.9);}}
+        .icon-link i {text-shadow:0 0 10px rgba(255,255,255,0.8);}
+        .ripple {position:absolute; border-radius:50%; transform:scale(0); animation:ripple 0.6s linear; background: rgba(255,255,255,0.4);}
+        @keyframes ripple {to {transform: scale(4); opacity:0;}}
 
         /* Right Section - Time */
-        .right-section {
-            position: absolute;
-            top: 40px;
-            right: 60px;
-            text-align: right;
-        }
-
-        .time-display {
-            font-size: 32px;
-            font-weight: 300;
-            color: #fff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-            letter-spacing: 2px;
-            transition: opacity 0.3s ease;
-        }
-
-        .greeting {
-            font-size: 18px;
-            margin-top: 5px;
-            font-weight: 300;
-            color: #fff;
-            text-shadow: 0 0 8px rgba(255,255,255,0.3);
-        }
+        .right-section {position:absolute; top:40px; right:60px; text-align:right;}
+        .time-display {font-size:32px; font-weight:300; color:#fff; text-shadow:0 0 15px rgba(255,255,255,0.5); letter-spacing:2px; transition:opacity 0.3s ease;}
+        .greeting {font-size:18px; margin-top:5px; font-weight:300; color:#fff; text-shadow:0 0 8px rgba(255,255,255,0.3);}
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 0 40px;
-            }
-            
-            .center-section {
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                justify-content: center;
-                padding: 0 30px;
-                gap: 50px;
-            }
-
-            .left-section {
-                flex-direction: column;
-            }
-
-            .right-section {
-                position: static;
-            }
-
-            .center-section {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
+        @media (max-width:1024px){.container{padding:0 40px;}.center-section{gap:20px;}}
+        @media (max-width:768px){.container{flex-direction:column; justify-content:center; padding:0 30px; gap:50px;}.left-section{flex-direction:column;}.right-section{position:static;}.center-section{flex-wrap:wrap; justify-content:center;}}
     </style>
 </head>
 <body>
+    <!-- Background Video -->
+    <video id="bg-video" src="goat.mp4" autoplay loop muted playsinline></video>
+
     <!-- Starfield Canvas -->
     <div id="stars"></div>
 
@@ -262,7 +82,6 @@
 
     <!-- Main Container -->
     <div class="container">
-        
         <!-- Left Section - Profile -->
         <div class="left-section">
             <div class="profile-pic">
@@ -273,7 +92,7 @@
 
         <!-- Center Section - Icons -->
         <div class="center-section">
-            <a href="https://discord.com/users/421005145980141580" title="Discord"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://discord.com/users/421005145980141580" class="icon-link" title="Discord"><i class="fa-brands fa-discord"></i></a>
             <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq?si=1433159ede0544f2" class="icon-link" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
             <a href="https://github.com/inf3rno1" class="icon-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
             <a href="mailto:ryzenfelixx@gmail.com" class="icon-link" title="Email"><i class="fa-solid fa-envelope"></i></a>
@@ -286,7 +105,6 @@
             <a href="#" class="icon-link" title="Ethereum"><i class="fa-brands fa-ethereum"></i></a>
             <a href="#" class="icon-link" title="Menu"><i class="fa-solid fa-bars"></i></a>
         </div>
-
     </div>
 
     <!-- Right Section - Time + Greeting -->
@@ -295,86 +113,73 @@
         <div class="greeting" id="greeting">Hello</div>
     </div>
 
-    <!-- Background Audio -->
-    <audio id="bg-music" src="your-song.mp3" autoplay loop></audio>
-
     <script>
         // --- Time & Greeting ---
-        function updateTime() {
+        function updateTime(){
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2,'0');
+            const minutes = String(now.getMinutes()).padStart(2,'0');
+            const seconds = String(now.getSeconds()).padStart(2,'0');
             const timeEl = document.getElementById('time');
-            timeEl.style.opacity = 0;
-            setTimeout(() => {
-                timeEl.textContent = `${hours}:${minutes}:${seconds}`;
-                timeEl.style.opacity = 1;
-            }, 100);
+            timeEl.style.opacity=0;
+            setTimeout(()=>{timeEl.textContent=`${hours}:${minutes}:${seconds}`; timeEl.style.opacity=1;},100);
 
             const greetingEl = document.getElementById('greeting');
-            if(now.getHours() < 12) greetingEl.textContent = 'Good Morning';
-            else if(now.getHours() < 18) greetingEl.textContent = 'Good Afternoon';
-            else greetingEl.textContent = 'Good Evening';
+            if(now.getHours()<12) greetingEl.textContent='Good Morning';
+            else if(now.getHours()<18) greetingEl.textContent='Good Afternoon';
+            else greetingEl.textContent='Good Evening';
         }
         updateTime();
-        setInterval(updateTime, 1000);
+        setInterval(updateTime,1000);
 
         // --- Stars ---
-        const starCount = 100;
-        const starsContainer = document.getElementById('stars');
-        const stars = [];
+        const starCount=100;
+        const starsContainer=document.getElementById('stars');
+        const stars=[];
         for(let i=0;i<starCount;i++){
-            const star = document.createElement('div');
+            const star=document.createElement('div');
             star.classList.add('star');
-            star.style.width = star.style.height = Math.random()*2 + 1 + 'px';
-            star.style.top = Math.random()*100 + 'vh';
-            star.style.left = Math.random()*100 + 'vw';
+            star.style.width=star.style.height=Math.random()*2+1+'px';
+            star.style.top=Math.random()*100+'vh';
+            star.style.left=Math.random()*100+'vw';
             starsContainer.appendChild(star);
             stars.push(star);
         }
 
         // --- Floating Particles ---
-        const particleCount = 50;
-        const particlesContainer = document.getElementById('particles');
-        const particles = [];
+        const particleCount=50;
+        const particlesContainer=document.getElementById('particles');
+        const particles=[];
         for(let i=0;i<particleCount;i++){
-            const particle = document.createElement('div');
+            const particle=document.createElement('div');
             particle.classList.add('particle');
-            particle.style.left = Math.random()*100 + 'vw';
-            particle.style.top = Math.random()*100 + 'vh';
-            particle.style.animationDuration = 5 + Math.random()*5 + 's';
+            particle.style.left=Math.random()*100+'vw';
+            particle.style.top=Math.random()*100+'vh';
+            particle.style.animationDuration=5+Math.random()*5+'s';
             particlesContainer.appendChild(particle);
             particles.push(particle);
         }
 
         // --- Icon Ripple Effect ---
-        const icons = document.querySelectorAll('.icon-link');
-        icons.forEach(icon => {
-            icon.addEventListener('click', e => {
-                const ripple = document.createElement('span');
+        const icons=document.querySelectorAll('.icon-link');
+        icons.forEach(icon=>{
+            icon.addEventListener('click',e=>{
+                const ripple=document.createElement('span');
                 ripple.classList.add('ripple');
-                ripple.style.left = e.offsetX + 'px';
-                ripple.style.top = e.offsetY + 'px';
+                ripple.style.left=e.offsetX+'px';
+                ripple.style.top=e.offsetY+'px';
                 icon.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
+                setTimeout(()=>ripple.remove(),600);
             });
         });
 
         // --- Mouse Parallax ---
-        document.addEventListener('mousemove', e => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-
-            stars.forEach(star => {
-                star.style.transform = `translate(${x/10}px, ${y/10}px)`;
-            });
-
-            particles.forEach(p => {
-                p.style.transform = `translate(${x/20}px, ${y/20}px)`;
-            });
-
-            document.querySelector('.container').style.transform = `translate(${x/30}px, ${y/30}px)`;
+        document.addEventListener('mousemove', e=>{
+            const x=(e.clientX/window.innerWidth-0.5)*20;
+            const y=(e.clientY/window.innerHeight-0.5)*20;
+            stars.forEach(star=>{star.style.transform=`translate(${x/10}px,${y/10}px)`;});
+            particles.forEach(p=>{p.style.transform=`translate(${x/20}px,${y/20}px)`;});
+            document.querySelector('.container').style.transform=`translate(${x/30}px,${y/30}px)`;
         });
     </script>
 </body>
