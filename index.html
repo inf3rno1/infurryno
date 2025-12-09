@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>inferno // presence</title>
-    <!-- Font: Jura (Tech/Elegant) and Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Font: Jura (Tech) and Poppins (Clean) -->
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --glass-bg: rgba(0, 0, 0, 0.45);
+            --glass-bg: rgba(0, 0, 0, 0.55); /* Slightly darker for better contrast */
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-blur: 20px;
+            --glass-blur: 25px;
             --text-main: #ffffff;
             --text-dim: #a0a0a0;
-            --accent-glow: rgba(255, 255, 255, 0.15);
+            --accent: #ffffff; 
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none; /* Prevents highlighting text */
+            user-select: none;
         }
 
         body {
@@ -34,12 +34,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px; /* For 3D Tilt Effect */
+            perspective: 1200px; /* Stronger 3D perspective */
         }
 
         /* --- BACKGROUND LAYERS --- */
-        
-        /* 1. The Image (Parallax Background) */
         .bg-layer {
             position: fixed;
             top: -5%;
@@ -50,23 +48,21 @@
             background-size: cover;
             background-position: center;
             z-index: -3;
-            filter: brightness(0.6) contrast(1.1);
+            filter: brightness(0.5) contrast(1.1); /* Darker for content pop */
             transition: transform 0.1s ease-out;
         }
 
-        /* 2. Gradient Overlay (Vignette) */
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 90%);
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 95%);
             z-index: -2;
             pointer-events: none;
         }
 
-        /* 3. Canvas for Constellation Particles */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -77,52 +73,57 @@
             pointer-events: none;
         }
 
-        /* --- MAIN UI CONTAINER (Glass Card) --- */
+        /* --- MAIN LAYOUT --- */
         .glass-panel {
             position: relative;
             width: 90%;
-            max-width: 1400px;
+            max-width: 1500px;
             height: auto;
-            min-height: 200px;
+            min-height: 400px;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end; /* Align bottom */
-            padding: 40px 50px;
+            align-items: flex-end;
+            padding: 40px;
             z-index: 10;
-            
-            /* The Glass Effect */
-            background: transparent;
-            /* We don't use a background on the main container to keep the middle open for the anime */
         }
 
-        /* --- LEFT SIDE: IDENTITY --- */
-        .profile-card {
+        /* --- LEFT COLUMN (Profile + About) --- */
+        .left-column {
             display: flex;
-            align-items: center;
-            gap: 25px;
-            padding: 25px;
+            flex-direction: column;
+            gap: 15px; /* Space between boxes */
+            width: 320px;
+            transform-style: preserve-3d;
+        }
+
+        /* Common Glass Card Style */
+        .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--glass-blur));
             -webkit-backdrop-filter: blur(var(--glass-blur));
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            
-            /* 3D Transform Defaults */
-            transform-style: preserve-3d;
-            transform: translateZ(20px);
-            transition: transform 0.2s ease-out, box-shadow 0.3s ease;
+            transition: transform 0.2s ease-out, border-color 0.3s;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
 
-        .profile-card:hover {
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            border-color: rgba(255,255,255,0.2);
+        /* 1. Profile Box */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
         }
 
         .pfp-container {
             position: relative;
-            width: 90px;
-            height: 90px;
+            width: 70px;
+            height: 70px;
         }
 
         .pfp-container img {
@@ -133,166 +134,175 @@
             border: 2px solid rgba(255,255,255,0.8);
         }
 
-        /* Pulse Ring */
-        .pfp-container::after {
-            content: '';
-            position: absolute;
-            top: -5px; left: -5px; right: -5px; bottom: -5px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.3);
-            animation: pulse-ring 3s infinite;
-        }
-
         .identity-text {
             display: flex;
             flex-direction: column;
         }
 
         .name {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 700;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+            line-height: 1;
         }
 
-        .role {
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
-            color: var(--text-dim);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-top: -5px;
-        }
-
-        /* Live Audio Visualizer (Fake) */
         .visualizer {
             display: flex;
             align-items: flex-end;
             gap: 3px;
-            height: 15px;
-            margin-top: 10px;
+            height: 12px;
+            margin-top: 8px;
         }
         .bar {
-            width: 3px;
+            width: 2px;
             background: #fff;
             animation: equalize 1s infinite ease-in-out;
         }
         .bar:nth-child(1) { height: 60%; animation-duration: 0.8s; }
         .bar:nth-child(2) { height: 30%; animation-duration: 1.1s; }
         .bar:nth-child(3) { height: 90%; animation-duration: 0.9s; }
-        .bar:nth-child(4) { height: 50%; animation-duration: 1.2s; }
+
+        /* 2. About Me Box (New) */
+        .about-card {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .role-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .role-title i { font-size: 12px; opacity: 0.7; }
+
+        .project-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .chip:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.15);
+        }
+
+        .love-status {
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .love-status i {
+            color: #ff4d4d;
+            font-size: 10px;
+            animation: heartbeat 1.5s infinite;
+        }
 
         /* --- CENTER: DOCK --- */
         .dock-container {
             position: absolute;
             bottom: 40px;
             left: 50%;
-            transform: translateX(-50%) translateZ(30px); /* 3D pop */
-            
+            transform: translateX(-50%);
             display: flex;
-            gap: 15px;
-            padding: 15px 25px;
-            
+            gap: 12px;
+            padding: 12px 20px;
             background: var(--glass-bg);
             backdrop-filter: blur(var(--glass-blur));
-            -webkit-backdrop-filter: blur(var(--glass-blur));
             border: 1px solid var(--glass-border);
             border-radius: 50px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
+            transition: transform 0.1s;
         }
 
         .dock-icon {
             position: relative;
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 18px;
             color: rgba(255,255,255,0.7);
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             background: rgba(255,255,255,0.03);
         }
 
         .dock-icon:hover {
-            transform: translateY(-10px) scale(1.2);
+            transform: translateY(-8px) scale(1.1);
             background: rgba(255,255,255,0.15);
             color: #fff;
             box-shadow: 0 5px 15px rgba(255,255,255,0.2);
         }
 
-        /* Tooltip */
-        .dock-icon::before {
-            content: attr(data-title);
-            position: absolute;
-            top: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 10px;
-            font-family: 'Poppins', sans-serif;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            white-space: nowrap;
-        }
-        .dock-icon:hover::before {
-            opacity: 1;
+        /* --- RIGHT SIDE: CLOCK --- */
+        .right-column {
+            transform-style: preserve-3d;
         }
 
-
-        /* --- RIGHT SIDE: CHRONOS --- */
         .clock-card {
             text-align: right;
             padding: 25px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(var(--glass-blur));
-            -webkit-backdrop-filter: blur(var(--glass-blur));
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transform: translateZ(20px);
         }
 
         .time-big {
-            font-size: 58px;
+            font-size: 64px;
             font-weight: 300;
-            line-height: 1;
-            letter-spacing: -2px;
-            color: #fff;
-            /* Monospace digits for no jumping */
+            line-height: 0.9;
+            letter-spacing: -3px;
             font-variant-numeric: tabular-nums; 
         }
 
         .date-small {
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dim);
-            margin-top: 5px;
+            margin-top: 10px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .location {
-            font-size: 10px;
-            color: rgba(255,255,255,0.4);
-            margin-top: 2px;
+            letter-spacing: 3px;
         }
 
         /* --- ANIMATIONS --- */
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.3); opacity: 0; }
-        }
-
         @keyframes equalize {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(0.5); }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
         }
 
         /* RESPONSIVE */
@@ -301,19 +311,20 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                gap: 30px;
+                gap: 20px;
+            }
+            .left-column {
+                width: 100%;
+                max-width: 350px;
             }
             .dock-container {
                 position: relative;
                 bottom: 0;
                 left: 0;
                 transform: none;
+                margin-top: 20px;
             }
             .clock-card {
-                text-align: center;
-            }
-            .profile-card {
-                flex-direction: column;
                 text-align: center;
             }
         }
@@ -321,181 +332,163 @@
 </head>
 <body>
 
-    <!-- 1. Parallax Background -->
+    <!-- 1. Background -->
     <div class="bg-layer" id="bg-layer"></div>
     <div class="overlay"></div>
-    
-    <!-- 2. Particle System -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- 3. Main UI -->
+    <!-- 2. Main Interface -->
     <div class="glass-panel" id="tilt-panel">
         
-        <!-- Profile -->
-        <div class="profile-card">
-            <div class="pfp-container">
-                <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" alt="Inferno">
-            </div>
-            <div class="identity-text">
-                <div class="name">inferno</div>
-                <div class="role">Systems Online</div>
-                <div class="visualizer">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
+        <!-- LEFT COLUMN -->
+        <div class="left-column" id="left-col">
+            
+            <!-- A. Profile Card -->
+            <div class="glass-card profile-card">
+                <div class="pfp-container">
+                    <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" alt="Inferno">
+                </div>
+                <div class="identity-text">
+                    <div class="name">inferno</div>
+                    <div class="visualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
                 </div>
             </div>
+
+            <!-- B. About / Stats Card -->
+            <div class="glass-card about-card">
+                <div class="role-title">
+                    <i class="fa-solid fa-terminal"></i> Exploit Developer
+                </div>
+                
+                <div class="project-chips">
+                    <div class="chip">Xenith</div>
+                    <div class="chip">Zenith</div>
+                    <div class="chip">Dusty Trip</div>
+                </div>
+
+                <div class="love-status">
+                    <i class="fa-solid fa-heart"></i> Married to Vava & Rain
+                </div>
+            </div>
+
         </div>
 
-        <!-- Dock Icons -->
-        <div class="dock-container">
-            <a href="https://discord.com/users/421005145980141580" class="dock-icon" data-title="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq?si=1433159ede0544f2" class="dock-icon" data-title="Spotify"><i class="fa-brands fa-spotify"></i></a>
-            <a href="https://github.com/inf3rno1" class="dock-icon" data-title="Github"><i class="fa-brands fa-github"></i></a>
-            <a href="mailto:ryzenfelixx@gmail.com" class="dock-icon" data-title="Mail"><i class="fa-solid fa-envelope"></i></a>
-            <a href="#" class="dock-icon" data-title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://t.me/astrixtrinity" class="dock-icon" data-title="Telegram"><i class="fa-brands fa-telegram"></i></a>
-            <a href="#" class="dock-icon" data-title="X"><i class="fa-brands fa-twitter"></i></a>
-            <a href="https://www.reddit.com/user/ryofei" class="dock-icon" data-title="Reddit"><i class="fa-brands fa-reddit"></i></a>
-            <a href="#" class="dock-icon" data-title="Steam"><i class="fa-brands fa-steam"></i></a>
-            <a href="#" class="dock-icon" data-title="Menu"><i class="fa-solid fa-bars"></i></a>
+        <!-- CENTER DOCK -->
+        <div class="dock-container" id="dock">
+            <a href="https://discord.com/users/421005145980141580" class="dock-icon"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq?si=1433159ede0544f2" class="dock-icon"><i class="fa-brands fa-spotify"></i></a>
+            <a href="https://github.com/inf3rno1" class="dock-icon"><i class="fa-brands fa-github"></i></a>
+            <a href="mailto:ryzenfelixx@gmail.com" class="dock-icon"><i class="fa-solid fa-envelope"></i></a>
+            <a href="#" class="dock-icon"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://t.me/astrixtrinity" class="dock-icon"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#" class="dock-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.reddit.com/user/ryofei" class="dock-icon"><i class="fa-brands fa-reddit"></i></a>
+            <a href="#" class="dock-icon"><i class="fa-brands fa-steam"></i></a>
         </div>
 
-        <!-- Clock -->
-        <div class="clock-card">
-            <div class="time-big" id="clock">00:00:00</div>
-            <div class="date-small" id="date">MONDAY, OCT 27</div>
-            <div class="location">TOKYO / JAPAN</div>
+        <!-- RIGHT COLUMN -->
+        <div class="right-column" id="right-col">
+            <div class="glass-card clock-card">
+                <div class="time-big" id="clock">00:00</div>
+                <div class="date-small" id="date">OCT 27</div>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // --- 1. CLOCK & DATE LOGIC ---
+        // --- CLOCK ---
         function updateClock() {
             const now = new Date();
-            
-            // Time
-            const timeStr = now.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-            });
-            document.getElementById('clock').textContent = timeStr;
-
-            // Date
-            const options = { weekday: 'long', month: 'short', day: 'numeric' };
-            const dateStr = now.toLocaleDateString('en-US', options).toUpperCase();
-            document.getElementById('date').textContent = dateStr;
+            document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }).toUpperCase();
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- 2. 3D PARALLAX & TILT EFFECT ---
+        // --- 3D PARALLAX & TILT ---
+        // This makes the elements move independently for depth
         const bg = document.getElementById('bg-layer');
-        const panel = document.getElementById('tilt-panel');
-        const profile = document.querySelector('.profile-card');
-        const clock = document.querySelector('.clock-card');
-        const dock = document.querySelector('.dock-container');
+        const leftCol = document.getElementById('left-col');
+        const rightCol = document.getElementById('right-col');
+        const dock = document.getElementById('dock');
 
         document.addEventListener('mousemove', (e) => {
             const x = e.clientX / window.innerWidth;
             const y = e.clientY / window.innerHeight;
 
-            // Background Parallax (Moves opposite to mouse)
-            const bgX = (0.5 - x) * 20;
-            const bgY = (0.5 - y) * 20;
-            bg.style.transform = `translate(${bgX}px, ${bgY}px) scale(1.1)`; // Scale prevents edges showing
+            // 1. Background moves opposite
+            bg.style.transform = `translate(${(0.5 - x) * 20}px, ${(0.5 - y) * 20}px) scale(1.1)`;
 
-            // UI 3D Tilt (Subtle)
-            // Calculate rotation based on center of screen
-            const rotateY = (x - 0.5) * 5; // Max 5deg rotation
-            const rotateX = (0.5 - y) * 5;
+            // 2. Elements tilt towards mouse
+            const rotateY = (x - 0.5) * 8; 
+            const rotateX = (0.5 - y) * 8;
 
-            // Apply to specific elements for "Floating" feel
-            profile.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
-            clock.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
-            
-            // Dock moves slightly less
+            // Apply different depths (Z-index translation) to make it feel 3D
+            leftCol.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
+            rightCol.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
             dock.style.transform = `translateX(-50%) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
         });
 
-        // --- 3. CONSTELLATION PARTICLE SYSTEM ---
+        // --- PARTICLES ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
 
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Slow velocity
-                this.vy = (Math.random() - 0.5) * 0.5;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
                 this.size = Math.random() * 2;
-                this.opacity = Math.random() * 0.5 + 0.2;
+                this.alpha = Math.random() * 0.5 + 0.1;
             }
-
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Bounce off edges
+                this.x += this.vx; this.y += this.vy;
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
                 ctx.fill();
             }
         }
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 80; i++) {
-                particles.push(new Particle());
-            }
-        }
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
 
-        function animateParticles() {
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-
-                // Connect particles if close
-                for (let j = i; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                // Constellations
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 120) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - distance/1500})`;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - dist/1200})`;
+                        ctx.moveTo(p.x, p.y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
                     }
                 }
-            }
-            requestAnimationFrame(animateParticles);
+            });
+            requestAnimationFrame(animate);
         }
-
-        initParticles();
-        animateParticles();
+        animate();
     </script>
 </body>
 </html>
