@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shreyansh</title>
-    <!-- Pixel Font -->
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <!-- Icons -->
+    <title>inferno // presence</title>
+    <!-- Font: Jura (Tech) and Poppins (Clean) -->
+    <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
+        :root {
+            --glass-bg: rgba(0, 0, 0, 0.55); /* Slightly darker for better contrast */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: 25px;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --accent: #ffffff; 
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,499 +25,470 @@
         }
 
         body {
-            font-family: 'VT323', monospace;
-            background: #000;
-            color: #fff;
+            font-family: 'Jura', sans-serif;
+            background: #050505;
+            color: var(--text-main);
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 1200px; /* Stronger 3D perspective */
         }
 
-        /* --- BACKGROUND VIDEO --- */
-        #bg-video {
+        /* --- BACKGROUND LAYERS --- */
+        .bg-layer {
+            position: fixed;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
+            background-image: url('https://images2.alphacoders.com/100/thumb-1920-1002619.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+            filter: brightness(0.5) contrast(1.1); /* Darker for content pop */
+            transition: transform 0.1s ease-out;
+        }
+
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 95%);
             z-index: -2;
-            filter: brightness(0.6);
+            pointer-events: none;
         }
 
-        /* --- CLICK TO ENTER OVERLAY --- */
-        #overlay {
+        #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
-            z-index: 999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: opacity 0.5s ease;
-        }
-        
-        #overlay h1 {
-            font-size: 30px;
-            animation: blink 1s infinite;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* --- VOLUME TOGGLE (Top Left) --- */
-        .volume-control {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+        /* --- MAIN LAYOUT --- */
+        .glass-panel {
+            position: relative;
+            width: 90%;
+            max-width: 1500px;
+            height: auto;
+            min-height: 400px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-            cursor: pointer;
-            z-index: 50;
-        }
-
-        /* --- MAIN CONTAINER --- */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 650px;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 40px;
             z-index: 10;
         }
 
-        /* --- PROFILE SECTION --- */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 25px;
-            width: 100%;
-            padding-left: 20px;
-        }
-
-        .main-pfp-wrapper {
-            position: relative;
-        }
-
-        .main-pfp {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            /* The Purple/Blue Aura */
-            box-shadow: 0 0 20px 5px rgba(88, 101, 242, 0.6), inset 0 0 10px rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.2);
-            object-fit: cover;
-        }
-
-        .user-info h1 {
-            font-size: 42px;
-            font-weight: 400;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .badges {
-            display: flex;
-            gap: 5px;
-            background: rgba(0,0,0,0.4);
-            padding: 3px 6px;
-            border-radius: 6px;
-        }
-
-        .badge-icon {
-            width: 18px;
-            height: 18px;
-        }
-
-        .normie-text {
-            font-size: 20px;
-            color: #ddd;
-            margin-top: -5px;
-        }
-
-        .joined-text {
-            font-size: 16px;
-            color: #aaa;
-            margin-top: 2px;
-        }
-
-        /* --- GLASS CARDS ROW --- */
-        .cards-row {
-            display: flex;
-            gap: 15px;
-            width: 100%;
-            justify-content: center;
-            margin-bottom: 25px;
-        }
-
-        .glass-box {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            height: 80px;
-            width: 260px;
-        }
-
-        /* Left Card: User Mini */
-        .user-mini-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            margin-right: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .user-mini-text h3 { font-size: 20px; font-weight: normal; }
-        .user-mini-text p { font-size: 14px; color: #aaa; font-style: italic; }
-
-        /* Right Card: Server Invite */
-        .server-icon {
-            width: 45px;
-            height: 45px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            margin-right: 12px;
-        }
-        .server-info h3 { font-size: 20px; font-weight: normal; }
-        .server-info p { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 5px; }
-        .online-dot { width: 6px; height: 6px; background: #23a559; border-radius: 50%; display: inline-block; }
-        
-        .join-btn {
-            background: #23a559;
-            color: white;
-            border: none;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-family: 'VT323', monospace;
-            font-size: 14px;
-            margin-top: 4px;
-            cursor: pointer;
-        }
-
-        /* --- SOCIAL ICONS --- */
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .social-icons a {
-            color: rgba(255,255,255,0.8);
-            transition: 0.2s;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        .social-icons a:hover {
-            color: #fff;
-            transform: scale(1.1);
-            text-shadow: 0 0 15px rgba(255,255,255,0.6);
-        }
-
-        .mail-wrapper {
-            font-size: 24px;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 25px;
-        }
-
-        /* --- FOOTER STATS --- */
-        .footer-stats {
-            display: flex;
-            gap: 20px;
-            font-size: 16px;
-            color: #ddd;
-            text-shadow: 1px 1px 2px #000;
-        }
-        .footer-stats i { margin-right: 5px; font-size: 14px; }
-
-        /* --- MUSIC PLAYER --- */
-        .music-player {
-            position: absolute;
-            bottom: 60px;
+        /* --- LEFT COLUMN (Profile + About) --- */
+        .left-column {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 500px;
-        }
-        
-        .song-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            width: 100%;
-            margin-bottom: 5px;
+            gap: 15px; /* Space between boxes */
+            width: 320px;
+            transform-style: preserve-3d;
         }
 
-        .album-art {
-            width: 40px;
-            height: 40px;
+        /* Common Glass Card Style */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease-out, border-color 0.3s;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        /* 1. Profile Box */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .pfp-container {
+            position: relative;
+            width: 70px;
+            height: 70px;
+        }
+
+        .pfp-container img {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            animation: spin 8s linear infinite;
+            border: 2px solid rgba(255,255,255,0.8);
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        .track-details {
+        .identity-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 12px;
+            margin-top: 8px;
+        }
+        .bar {
+            width: 2px;
+            background: #fff;
+            animation: equalize 1s infinite ease-in-out;
+        }
+        .bar:nth-child(1) { height: 60%; animation-duration: 0.8s; }
+        .bar:nth-child(2) { height: 30%; animation-duration: 1.1s; }
+        .bar:nth-child(3) { height: 90%; animation-duration: 0.9s; }
+
+        /* 2. About Me Box (New) */
+        .about-card {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .role-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
+            margin-bottom: 5px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 18px;
+            gap: 8px;
         }
         
-        .heart-icon { color: #ff5e97; font-size: 14px; }
+        .role-title i { font-size: 12px; opacity: 0.7; }
 
-        .progress-container {
+        .project-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .chip:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.15);
+        }
+
+        .love-status {
+            font-size: 12px;
+            font-family: 'Poppins', sans-serif;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
             display: flex;
             align-items: center;
-            width: 100%;
-            gap: 10px;
-            font-size: 16px;
-            color: #ccc;
+            gap: 6px;
         }
 
-        .progress-bar {
-            flex-grow: 1;
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-            position: relative;
+        .love-status i {
+            color: #ff4d4d;
+            font-size: 10px;
+            animation: heartbeat 1.5s infinite;
         }
 
-        .progress-fill {
+        /* --- CENTER: DOCK --- */
+        .dock-container {
             position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 55%; /* Fixed for visual clone */
-            background: #fff;
-            border-radius: 2px;
-            box-shadow: 0 0 10px #fff;
-        }
-
-        .controls {
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            gap: 10px;
-            font-size: 14px;
+            gap: 12px;
+            padding: 12px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.1s;
         }
 
-        /* --- PARTICLES --- */
-        #particles {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: -1;
+        .dock-icon {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: rgba(255,255,255,0.03);
+        }
+
+        .dock-icon:hover {
+            transform: translateY(-8px) scale(1.1);
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+
+        /* --- RIGHT SIDE: CLOCK --- */
+        .right-column {
+            transform-style: preserve-3d;
+        }
+
+        .clock-card {
+            text-align: right;
+            padding: 25px;
+        }
+
+        .time-big {
+            font-size: 64px;
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -3px;
+            font-variant-numeric: tabular-nums; 
+        }
+
+        .date-small {
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes equalize {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .glass-panel {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+            }
+            .left-column {
+                width: 100%;
+                max-width: 350px;
+            }
+            .dock-container {
+                position: relative;
+                bottom: 0;
+                left: 0;
+                transform: none;
+                margin-top: 20px;
+            }
+            .clock-card {
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- CLICK TO ENTER -->
-    <div id="overlay">
-        <h1>[ CLICK TO ENTER ]</h1>
-    </div>
+    <!-- 1. Background -->
+    <div class="bg-layer" id="bg-layer"></div>
+    <div class="overlay"></div>
+    <canvas id="particle-canvas"></canvas>
 
-    <!-- BACKGROUND VIDEO -->
-    <video id="bg-video" loop muted playsinline>
-        <!-- REPLACE WITH YOUR VIDEO FILE -->
-        <source src="background.mp4" type="video/mp4">
-    </video>
-
-    <!-- PARTICLES -->
-    <canvas id="particles"></canvas>
-
-    <!-- VOLUME BUTTON -->
-    <div class="volume-control" id="vol-btn">
-        <i class="fa-solid fa-volume-xmark" id="vol-icon"></i>
-    </div>
-
-    <div class="container">
+    <!-- 2. Main Interface -->
+    <div class="glass-panel" id="tilt-panel">
         
-        <!-- HEADER -->
-        <div class="profile-header">
-            <div class="main-pfp-wrapper">
-                <!-- Main PFP -->
-                <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" class="main-pfp" alt="PFP">
-            </div>
-            <div class="user-info">
-                <h1>
-                    Shreyansh 
-                    <!-- Badges Row -->
-                    <div class="badges">
-                        <img src="https://raw.githubusercontent.com/kaasapi/discord-badges/master/png/hypesquad-balance.png" class="badge-icon">
-                        <img src="https://raw.githubusercontent.com/kaasapi/discord-badges/master/png/nitro.png" class="badge-icon">
-                        <img src="https://raw.githubusercontent.com/kaasapi/discord-badges/master/png/boost.png" class="badge-icon">
-                    </div>
-                </h1>
-                <p class="normie-text">A Normie.....</p>
-                <p class="joined-text">Joined 10 months ago</p>
-            </div>
-        </div>
-
-        <!-- GLASS CARDS -->
-        <div class="cards-row">
-            <!-- Left Card -->
-            <div class="glass-box">
-                <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" class="user-mini-img" alt="Mini">
-                <div class="user-mini-text">
-                    <h3>shreyansh.cc</h3>
-                    <p>last seen unknown</p>
-                </div>
-            </div>
+        <!-- LEFT COLUMN -->
+        <div class="left-column" id="left-col">
             
-            <!-- Right Card -->
-            <div class="glass-box">
-                <div class="server-icon"><i class="fa-solid fa-exclamation"></i></div>
-                <div class="server-info">
-                    <h3>Not Found</h3>
-                    <p><span class="online-dot"></span> 0 Online • 0 Members</p>
-                    <button class="join-btn">Join</button>
+            <!-- A. Profile Card -->
+            <div class="glass-card profile-card">
+                <div class="pfp-container">
+                    <img src="https://r2.guns.lol/0b456ced-b725-4ffb-9cc5-686f5b3647e6.webp" alt="Inferno">
+                </div>
+                <div class="identity-text">
+                    <div class="name">inferno</div>
+                    <div class="visualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
                 </div>
             </div>
+
+            <!-- B. About / Stats Card -->
+            <div class="glass-card about-card">
+                <div class="role-title">
+                    <i class="fa-solid fa-terminal"></i> Exploit Developer
+                </div>
+                
+                <div class="project-chips">
+                    <div class="chip">Xenith</div>
+                    <div class="chip">Zenith</div>
+                    <div class="chip">Dusty Trip</div>
+                </div>
+
+                <div class="love-status">
+                    <i class="fa-solid fa-heart"></i> Married to Vava & Rain
+                </div>
+            </div>
+
         </div>
 
-        <!-- ICONS -->
-        <div class="social-icons">
-            <a href="#"><i class="fa-brands fa-discord"></i></a>
-            <a href="#"><i class="fa-brands fa-github"></i></a>
-            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#"><i class="fa-brands fa-telegram"></i></a>
-            <a href="#"><i class="fa-brands fa-spotify"></i></a>
-            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-weixin"></i></a> <!-- Using weixin as placeholder for the speech bubble -->
-            <a href="#"><i class="fa-brands fa-reddit-alien"></i></a>
-            <a href="#"><i class="fa-brands fa-paypal"></i></a>
-            <a href="#"><i class="fa-brands fa-steam"></i></a>
-            <a href="#"><i class="fa-brands fa-ethereum"></i></a>
-            <a href="#"><i class="fa-solid fa-bars"></i></a>
-        </div>
-        <div class="mail-wrapper">
-            <i class="fa-solid fa-envelope"></i>
+        <!-- CENTER DOCK -->
+        <div class="dock-container" id="dock">
+            <a href="https://discord.com/users/421005145980141580" class="dock-icon"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq?si=1433159ede0544f2" class="dock-icon"><i class="fa-brands fa-spotify"></i></a>
+            <a href="https://github.com/inf3rno1" class="dock-icon"><i class="fa-brands fa-github"></i></a>
+            <a href="mailto:ryzenfelixx@gmail.com" class="dock-icon"><i class="fa-solid fa-envelope"></i></a>
+            <a href="#" class="dock-icon"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://t.me/astrixtrinity" class="dock-icon"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#" class="dock-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.reddit.com/user/ryofei" class="dock-icon"><i class="fa-brands fa-reddit"></i></a>
+            <a href="#" class="dock-icon"><i class="fa-brands fa-steam"></i></a>
         </div>
 
-        <!-- FOOTER INFO -->
-        <div class="footer-stats">
-            <span><i class="fa-solid fa-eye"></i> 494</span>
-            <span><i class="fa-solid fa-location-dot"></i> In Your Heart &lt;3</span>
-        </div>
-
-    </div>
-
-    <!-- MUSIC PLAYER -->
-    <div class="music-player">
-        <div class="song-info">
-            <img src="https://i.pinimg.com/736x/8e/18/d5/8e18d5b88126742544d67319c8d506e5.jpg" class="album-art" alt="Art">
-            <div class="track-details">
-                I want to Eat Your Pancreas <i class="fa-solid fa-heart heart-icon"></i>
+        <!-- RIGHT COLUMN -->
+        <div class="right-column" id="right-col">
+            <div class="glass-card clock-card">
+                <div class="time-big" id="clock">00:00</div>
+                <div class="date-small" id="date">OCT 27</div>
             </div>
         </div>
-        <div class="progress-container">
-            <span>1:30</span>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <span>1:52</span>
-            <div class="controls">
-                <i class="fa-solid fa-backward-step"></i>
-                <i class="fa-solid fa-pause"></i>
-                <i class="fa-solid fa-forward-step"></i>
-            </div>
-        </div>
+
     </div>
 
     <script>
-        // --- VIDEO AUDIO TOGGLE ---
-        const video = document.getElementById('bg-video');
-        const overlay = document.getElementById('overlay');
-        const volBtn = document.getElementById('vol-btn');
-        const volIcon = document.getElementById('vol-icon');
+        // --- CLOCK ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }).toUpperCase();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-        // Initial State: Muted
-        video.muted = true;
+        // --- 3D PARALLAX & TILT ---
+        // This makes the elements move independently for depth
+        const bg = document.getElementById('bg-layer');
+        const leftCol = document.getElementById('left-col');
+        const rightCol = document.getElementById('right-col');
+        const dock = document.getElementById('dock');
 
-        // Click to Enter
-        overlay.addEventListener('click', () => {
-            overlay.style.opacity = '0';
-            setTimeout(() => overlay.remove(), 500);
-            video.play();
-            video.muted = false; // Unmute on entry
-            volIcon.className = 'fa-solid fa-volume-high';
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            // 1. Background moves opposite
+            bg.style.transform = `translate(${(0.5 - x) * 20}px, ${(0.5 - y) * 20}px) scale(1.1)`;
+
+            // 2. Elements tilt towards mouse
+            const rotateY = (x - 0.5) * 8; 
+            const rotateX = (0.5 - y) * 8;
+
+            // Apply different depths (Z-index translation) to make it feel 3D
+            leftCol.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
+            rightCol.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(30px)`;
+            dock.style.transform = `translateX(-50%) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
         });
 
-        // Toggle Button
-        volBtn.addEventListener('click', () => {
-            if(video.muted) {
-                video.muted = false;
-                volIcon.className = 'fa-solid fa-volume-high';
-            } else {
-                video.muted = true;
-                volIcon.className = 'fa-solid fa-volume-xmark';
-            }
-        });
-
-        // --- SIMPLE PARTICLES (Square/Pixel style) ---
-        const canvas = document.getElementById('particles');
+        // --- PARTICLES ---
+        const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
+        let particles = [];
         
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
 
-        const particles = [];
-        
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1; // slightly larger for pixel feel
-                this.speedY = Math.random() * 0.5 + 0.1;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 2;
+                this.alpha = Math.random() * 0.5 + 0.1;
             }
             update() {
-                this.y -= this.speedY;
-                if(this.y < 0) this.y = canvas.height;
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(this.x, this.y, this.size, this.size); // Squares
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                ctx.fill();
             }
         }
 
-        for(let i=0; i<50; i++) particles.push(new Particle());
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
+            particles.forEach((p, index) => {
                 p.update();
                 p.draw();
+                // Constellations
+                for (let j = index; j < particles.length; j++) {
+                    const dx = p.x - particles[j].x;
+                    const dy = p.y - particles[j].y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 - dist/1200})`;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
             });
             requestAnimationFrame(animate);
         }
         animate();
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
     </script>
 </body>
 </html>
