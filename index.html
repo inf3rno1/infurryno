@@ -273,14 +273,14 @@
 
         <!-- Center Section - Icons -->
         <div class="center-section">
-            <a href="#" class="icon-link" title="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" class="icon-link" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
-            <a href="#" class="icon-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="icon-link" title="Email"><i class="fa-solid fa-envelope"></i></a>
+            <a href="https://discord.com/users/ryofei" class="icon-link" title="Discord"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq?si=1433159ede0544f2" class="icon-link" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
+            <a href="https://github.com/inf3rno1" class="icon-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="mailto:ryzenfelixx@gmail.com" class="icon-link" title="Email"><i class="fa-solid fa-envelope"></i></a>
             <a href="#" class="icon-link" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="icon-link" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+            <a href="https://t.me/astrixtrinity" class="icon-link" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
             <a href="#" class="icon-link" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" class="icon-link" title="Reddit"><i class="fa-brands fa-reddit"></i></a>
+            <a href="https://www.reddit.com/user/ryofei" class="icon-link" title="Reddit"><i class="fa-brands fa-reddit"></i></a>
             <a href="#" class="icon-link" title="PayPal"><i class="fa-brands fa-paypal"></i></a>
             <a href="#" class="icon-link" title="Steam"><i class="fa-brands fa-steam"></i></a>
             <a href="#" class="icon-link" title="Ethereum"><i class="fa-brands fa-ethereum"></i></a>
@@ -294,6 +294,9 @@
         <div class="time-display" id="time">00:00:00</div>
         <div class="greeting" id="greeting">Hello</div>
     </div>
+
+    <!-- Background Audio -->
+    <audio id="bg-music" src="your-song.mp3" autoplay loop></audio>
 
     <script>
         // --- Time & Greeting ---
@@ -320,6 +323,7 @@
         // --- Stars ---
         const starCount = 100;
         const starsContainer = document.getElementById('stars');
+        const stars = [];
         for(let i=0;i<starCount;i++){
             const star = document.createElement('div');
             star.classList.add('star');
@@ -327,11 +331,13 @@
             star.style.top = Math.random()*100 + 'vh';
             star.style.left = Math.random()*100 + 'vw';
             starsContainer.appendChild(star);
+            stars.push(star);
         }
 
         // --- Floating Particles ---
         const particleCount = 50;
         const particlesContainer = document.getElementById('particles');
+        const particles = [];
         for(let i=0;i<particleCount;i++){
             const particle = document.createElement('div');
             particle.classList.add('particle');
@@ -339,6 +345,7 @@
             particle.style.top = Math.random()*100 + 'vh';
             particle.style.animationDuration = 5 + Math.random()*5 + 's';
             particlesContainer.appendChild(particle);
+            particles.push(particle);
         }
 
         // --- Icon Ripple Effect ---
@@ -352,6 +359,22 @@
                 icon.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 600);
             });
+        });
+
+        // --- Mouse Parallax ---
+        document.addEventListener('mousemove', e => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+            stars.forEach(star => {
+                star.style.transform = `translate(${x/10}px, ${y/10}px)`;
+            });
+
+            particles.forEach(p => {
+                p.style.transform = `translate(${x/20}px, ${y/20}px)`;
+            });
+
+            document.querySelector('.container').style.transform = `translate(${x/30}px, ${y/30}px)`;
         });
     </script>
 </body>
