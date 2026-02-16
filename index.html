@@ -3,339 +3,92 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>inferno</title>
-    <meta name="description" content="INFERNO — Shadow Realm Exploit Developer | Ultra Anime AMV Portfolio">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>I AM ATOMIC — RYZEN FELIX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;700&family=Space+Mono:wght@400;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles2.css">
 </head>
 
 <body>
-    <!-- ═══ OVERLAYS ═══ -->
-    <div id="noise"></div>
-    <div id="scan"></div>
-    <div id="vhsScan"></div>
-    <div id="glitchLayer"></div>
-    <div id="halo"></div>
-    <div id="haloRing"></div>
-    <div id="sparkles"></div>
-    <canvas id="matrixCanvas"></canvas>
 
-    <!-- ════ PHASE 0: BOOT SEQUENCE ════ -->
-    <div id="phase0">
-        <div class="bl dim" id="bl0">INFERNO_OS v4.2.0 ................ BOOT<span id="bcursor"></span></div>
-        <div class="bl dim" id="bl1">&gt; Checking shadow realm integrity ...... [OK]</div>
-        <div class="bl" id="bl2">&gt; Loading exploit modules: XENITH ZENITH DUSTY_TRIP</div>
-        <div class="bl" id="bl3">&gt; Authenticating identity: INF3RNO ............ [VERIFIED]</div>
-        <div class="bl" id="bl4">&gt; Anime cores: [CID_KAGENOU] [KIRITO] [SAKUTA] [NASA_YUZAKI]</div>
-        <div class="bl" id="bl5">&gt; Dragon render engine: ████████████████████ [LOADED]</div>
-        <div class="bl" id="bl6">&gt; Animation pipeline: 100+ keyframes initialized .... [READY]</div>
-        <div class="bl hot" id="bl7">&gt;&gt; ALL SYSTEMS NOMINAL. INITIALIZING PRESENCE PROTOCOL...</div>
-        <div class="bootProgress">
-            <div class="bootProgressFill"></div>
-        </div>
+    <!-- Overlays -->
+    <div id="grain"></div>
+    <div id="scanlines"></div>
+    <div id="vignette"></div>
+
+    <!-- Full screen GIF background -->
+    <div id="gifBg">
+        <img src="https://media1.tenor.com/m/XJ7xxA7TJVEAAAAC/eminence-in-shadow-i-am-atomic.gif" alt="I Am Atomic"
+            id="cidGif">
+        <div id="gifVig"></div>
     </div>
 
-    <!-- ════ PHASE 1: CID KAGENOU ════ -->
-    <div id="phase1">
-        <img class="p1bg" src="https://media1.tenor.com/m/dwefugvaKrAAAAAd/the-eminence-in-shadow-cid-kagenou.gif"
-            alt="Cid Kagenou">
-        <div class="p1vig"></div>
-        <div class="p1wipe w1"></div>
-        <div class="p1wipe w2"></div>
-        <div class="p1wipe w3"></div>
-        <div class="energyBeam eb1"></div>
-        <div class="energyBeam eb2"></div>
-        <div class="energyBeam eb3"></div>
-        <div class="energyBeam eb4"></div>
-        <div class="hudCorner hc-tl"></div>
-        <div class="hudCorner hc-tr"></div>
-        <div class="hudCorner hc-bl"></div>
-        <div class="hudCorner hc-br"></div>
-        <div class="cinemaBars top"></div>
-        <div class="cinemaBars bottom"></div>
-        <div class="p1hud">// SHADOW GARDEN //</div>
-        <div class="p1hud p1hud2">INF3RNO ◆ ONLINE</div>
-        <div class="p1center">
-            <div class="p1eye">∥ entering the shadow ∥</div>
-            <div class="p1name">INFERNO</div>
-            <div class="p1sub">exploit developer <span style="color:var(--p2)">//</span> shadow realm</div>
+    <!-- Canvas for particle explosion -->
+    <canvas id="fxCanvas"></canvas>
+
+    <!-- Screen shake wrapper -->
+    <div id="shakeWrap">
+
+        <!-- Pre-text: "I AM..." whisper -->
+        <div id="preText">
+            <span class="iAm">I &nbsp;A M</span>
         </div>
-        <div class="p1bar">
-            <div class="p1track">
-                <div class="p1fill" id="p1fill"></div>
+
+        <!-- THE NAME — Main event -->
+        <div id="nameReveal">
+            <div id="nameGlitch">
+                <h1 id="mainName">
+                    <span class="letter" style="--i:0">R</span>
+                    <span class="letter" style="--i:1">Y</span>
+                    <span class="letter" style="--i:2">Z</span>
+                    <span class="letter" style="--i:3">E</span>
+                    <span class="letter" style="--i:4">N</span>
+                    <span class="spacer"></span>
+                    <span class="letter" style="--i:5">F</span>
+                    <span class="letter" style="--i:6">E</span>
+                    <span class="letter" style="--i:7">L</span>
+                    <span class="letter" style="--i:8">I</span>
+                    <span class="letter" style="--i:9">X</span>
+                </h1>
             </div>
-            <div class="p1pct" id="p1pct">0%</div>
-        </div>
-        <div class="skipbtn" id="skipBtn">[ skip ]</div>
-    </div>
-
-    <!-- ════ PHASE 2: KIRITO DUAL WIELD ════ -->
-    <div id="phase2">
-        <img class="p2bg" src="https://media1.tenor.com/m/OvqkjHgAqs8AAAAd/kirito-sao.gif" alt="Kirito">
-        <div class="p2vig"></div>
-        <div class="slash sl1"></div>
-        <div class="slash sl2"></div>
-        <div class="slash sl3"></div>
-        <div class="slash sl4"></div>
-        <div class="slash sl5"></div>
-        <div class="slash sl6"></div>
-        <div class="impactFlash"></div>
-        <div class="starburst"></div>
-        <div class="p2title">
-            <h1>SWORD ART ONLINE</h1>
-            <p>// LINK START //</p>
-        </div>
-    </div>
-
-    <!-- ════ PHASE 3: SAKUTA AZUSAGAWA ════ -->
-    <div id="phase3S">
-        <img class="p3Sbg" src="https://media1.tenor.com/m/g2jOUXIcVR4AAAAd/sakuta-azusagawa-sad.gif"
-            alt="Sakuta Azusagawa">
-        <div class="p3Svig"></div>
-        <div class="petal pt1"></div>
-        <div class="petal pt2"></div>
-        <div class="petal pt3"></div>
-        <div class="petal pt4"></div>
-        <div class="petal pt5"></div>
-        <div class="petal pt6"></div>
-        <div class="petal pt7"></div>
-        <div class="petal pt8"></div>
-        <div class="sakutaTitle">BUNNY GIRL SENPAI</div>
-        <div class="sakutaQuote">"The world doesn't run on logic alone"</div>
-    </div>
-
-    <!-- ════ PHASE 4: NASA YUZAKI (TONIKAWA) ════ -->
-    <div id="phase4">
-        <img class="p4bg" src="https://media1.tenor.com/m/W0UebYOWiIcAAAAd/tonikaku-kawaii-tonikawa.gif"
-            alt="Nasa Yuzaki">
-        <div class="p4vig"></div>
-        <div class="star s1"></div>
-        <div class="star s2"></div>
-        <div class="star s3"></div>
-        <div class="star s4"></div>
-        <div class="star s5"></div>
-        <div class="star s6"></div>
-        <div class="star s7"></div>
-        <div class="star s8"></div>
-        <div class="star s9"></div>
-        <div class="star s10"></div>
-        <div class="heartParticle hp1">♥</div>
-        <div class="heartParticle hp2">♥</div>
-        <div class="heartParticle hp3">♥</div>
-        <div class="heartParticle hp4">♥</div>
-        <div class="heartParticle hp5">♥</div>
-        <div class="p4title">
-            <h1>TONIKAWA</h1>
-            <p>// FLY ME TO THE MOON //</p>
-        </div>
-    </div>
-
-    <!-- ════ PHASE 5: DRAGON CANVAS ════ -->
-    <div id="phase5">
-        <canvas id="dragonCanvas"></canvas>
-    </div>
-
-    <!-- ════ MAIN ════ -->
-    <div id="main">
-        <div class="orb o1"></div>
-        <div class="orb o2"></div>
-        <div class="orb o3"></div>
-        <div class="orb o4"></div>
-        <div class="orb o5"></div>
-        <div class="mbg" id="mbg"></div>
-        <canvas id="fx"></canvas>
-        <canvas id="dragon2"></canvas>
-
-        <!-- Energy lines -->
-        <div class="energyLine el1"></div>
-        <div class="energyLine el2"></div>
-        <div class="energyLine el3"></div>
-        <div class="energyLine el4"></div>
-
-        <!-- Ghost chars -->
-        <div class="bgchar wr"><img src="https://media1.tenor.com/m/g2jOUXIcVR4AAAAd/sakuta-azusagawa-sad.gif"
-                alt="sakuta"></div>
-        <div class="bgchar wl"><img src="https://media1.tenor.com/m/OvqkjHgAqs8AAAAd/kirito-sao.gif" alt="kirito"
-                style="transform:scaleX(-1)"></div>
-        <div class="bgchar wr2"><img src="https://media1.tenor.com/m/W0UebYOWiIcAAAAd/tonikaku-kawaii-tonikawa.gif"
-                alt="tonikawa"></div>
-        <div class="bgchar wl2"><img
-                src="https://media1.tenor.com/m/dwefugvaKrAAAAAd/the-eminence-in-shadow-cid-kagenou.gif" alt="cid">
+            <!-- Sub text -->
+            <p id="subText">A &nbsp;T &nbsp;O &nbsp;M &nbsp;I &nbsp;C</p>
         </div>
 
-        <div class="stage">
-            <div class="card-wrap" id="cw">
-                <!-- Dragon frame glow -->
-                <div class="dragon-frame"></div>
+        <!-- Impact flash -->
+        <div id="impactFlash"></div>
 
-                <div class="card" id="card">
-                    <div class="topline"></div>
-                    <div class="botline"></div>
-                    <div class="sideline left"></div>
-                    <div class="sideline right"></div>
-                    <div class="brkt tl"></div>
-                    <div class="brkt tr"></div>
-                    <div class="brkt bl"></div>
-                    <div class="brkt br"></div>
+        <!-- Shockwave ring -->
+        <div id="shockwave"></div>
 
-                    <!-- BANNER -->
-                    <div class="banner s">
-                        <div class="blbl" id="blbl">// shadow garden //</div>
-                        <div class="bslide active" id="bs0"><img
-                                src="https://media1.tenor.com/m/s4r9xQj-F6wAAAAd/i-am-atomic-shadow-garden.gif"
-                                alt="atomic">
-                            <div class="bover"></div>
-                        </div>
-                        <div class="bslide" id="bs1"><img
-                                src="https://media1.tenor.com/m/dwefugvaKrAAAAAd/the-eminence-in-shadow-cid-kagenou.gif"
-                                alt="cid">
-                            <div class="bover"></div>
-                        </div>
-                        <div class="bslide" id="bs2"><img
-                                src="https://media1.tenor.com/m/bNO2syEA7a8AAAAd/azusagawa-sakuta.gif" alt="sakuta">
-                            <div class="bover"></div>
-                        </div>
-                        <div class="bslide" id="bs3"><img
-                                src="https://media1.tenor.com/m/W0UebYOWiIcAAAAd/tonikaku-kawaii-tonikawa.gif"
-                                alt="tonikawa">
-                            <div class="bover"></div>
-                        </div>
-                        <div class="bdots">
-                            <div class="bdot on" onclick="setBanner(0)"></div>
-                            <div class="bdot" onclick="setBanner(1)"></div>
-                            <div class="bdot" onclick="setBanner(2)"></div>
-                            <div class="bdot" onclick="setBanner(3)"></div>
-                        </div>
-                    </div>
+        <!-- Purple energy burst lines -->
+        <div class="burstLine bl1"></div>
+        <div class="burstLine bl2"></div>
+        <div class="burstLine bl3"></div>
+        <div class="burstLine bl4"></div>
+        <div class="burstLine bl5"></div>
+        <div class="burstLine bl6"></div>
+        <div class="burstLine bl7"></div>
+        <div class="burstLine bl8"></div>
+        <div class="burstLine bl9"></div>
+        <div class="burstLine bl10"></div>
+        <div class="burstLine bl11"></div>
+        <div class="burstLine bl12"></div>
 
-                    <!-- PROFILE -->
-                    <div class="prow s">
-                        <div class="av">
-                            <div class="avr1"></div>
-                            <div class="avr2"></div>
-                            <div class="avr3"></div>
-                            <div class="avr4"></div>
-                            <div class="avbg"></div>
-                            <img class="avimg"
-                                src="https://cdn.discordapp.com/avatars/1347477489668063274/a53f01ddf639abc9d240950c0ed82125.webp"
-                                onerror="this.src='https://www.pngmart.com/files/13/Kirito-PNG-Transparent-Image.png'"
-                                alt="inferno">
-                            <div class="avdot"></div>
-                        </div>
-                        <div class="qlinks">
-                            <a href="https://discord.com/users/421005145980141580" class="ql"><i
-                                    class="fa-brands fa-discord"></i></a>
-                            <a href="https://github.com/inf3rno1" class="ql"><i class="fa-brands fa-github"></i></a>
-                            <a href="mailto:ryzenfelixx@gmail.com" class="ql"><i class="fa-solid fa-envelope"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- IDENTITY -->
-                    <div class="identity s">
-                        <div class="idname"><span>inferno</span><i class="fa-solid fa-bolt idbolt"></i></div>
-                        <div class="idtag">inf3rno · <em>#shadow_realm</em></div>
-                        <div class="viz">
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <div class="vb"></div>
-                            <span class="vztxt">● LIVE</span>
-                        </div>
-                    </div>
-
-                    <div class="div s"></div>
-
-                    <div class="roles s">
-                        <div class="shead">role</div>
-                        <div class="rolechip"><i class="fa-solid fa-terminal ricon"></i>Exploit Developer</div>
-                        <div class="tags">
-                            <div class="tag">Xenith</div>
-                            <div class="tag">Zenith</div>
-                            <div class="tag">Dusty Trip</div>
-                        </div>
-                        <div class="love"><i class="fa-solid fa-heart ht"></i><span>Married to Vava &amp;
-                                Rain</span></div>
-                    </div>
-
-                    <div class="div s"></div>
-
-                    <!-- POWER LEVEL -->
-                    <div class="s" style="padding:0 22px">
-                        <div class="shead">power level</div>
-                    </div>
-                    <div class="powerBar s">
-                        <div class="powerFill"></div>
-                    </div>
-                    <div class="powerLabel s">
-                        <span>// shadow authority</span>
-                        <span>87%</span>
-                    </div>
-
-                    <div class="div s"></div>
-
-                    <!-- CHARACTER STRIP -->
-                    <div class="charstrip s">
-                        <div class="cslbl">characters</div>
-                        <img class="csg c1"
-                            src="https://media1.tenor.com/m/dwefugvaKrAAAAAd/the-eminence-in-shadow-cid-kagenou.gif"
-                            alt="cid">
-                        <img class="csg c2" src="https://media1.tenor.com/m/g2jOUXIcVR4AAAAd/sakuta-azusagawa-sad.gif"
-                            alt="sakuta">
-                        <img class="csg c3" src="https://media1.tenor.com/m/bNO2syEA7a8AAAAd/azusagawa-sakuta.gif"
-                            alt="sakuta2">
-                        <img class="csg c4"
-                            src="https://media1.tenor.com/m/W0UebYOWiIcAAAAd/tonikaku-kawaii-tonikawa.gif"
-                            alt="tonikawa">
-                    </div>
-
-                    <div class="div s"></div>
-
-                    <!-- DOCK -->
-                    <div class="dockrow s">
-                        <a href="https://open.spotify.com/user/31f5ebprjt7rtzejhdlkgijlggyq" class="di sp"><i
-                                class="fa-brands fa-spotify"></i></a>
-                        <a href="https://github.com/inf3rno1" class="di gh"><i class="fa-brands fa-github"></i></a>
-                        <a href="mailto:ryzenfelixx@gmail.com" class="di"><i class="fa-solid fa-envelope"></i></a>
-                        <a href="#" class="di yt"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="https://t.me/astrixtrinity" class="di tg"><i class="fa-brands fa-telegram"></i></a>
-                        <a href="#" class="di tw"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="https://www.reddit.com/user/ryofei" class="di rd"><i
-                                class="fa-brands fa-reddit"></i></a>
-                        <a href="#" class="di st"><i class="fa-brands fa-steam"></i></a>
-                    </div>
-
-                    <!-- BOTTOM -->
-                    <div class="botrow s">
-                        <div class="clkbox">
-                            <div class="ctime"><span id="ch">00</span><span class="csep">:</span><span id="cm">00</span>
-                            </div>
-                            <div class="cdate" id="cd">MON · FEB 16</div>
-                        </div>
-                        <div class="statbox">
-                            <div class="statdot"></div>
-                            <div class="stattxt">Online<br>Active</div>
-                        </div>
-                    </div>
-
-                </div><!-- /card -->
-            </div><!-- /card-wrap -->
-        </div>
     </div>
+
+    <!-- Chromatic aberration layer -->
+    <div id="chromatic"></div>
+
+    <!-- After-glitch flickers -->
+    <div id="afterGlitch"></div>
+
+    <!-- Click to replay -->
+    <div id="replayHint">[ CLICK TO REPLAY ]</div>
 
     <script src="script.js"></script>
 </body>
