@@ -1,96 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>I AM ATOMIC — RYZEN FELIX</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;700&family=Space+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles2.css">
-</head>
+    <title>SYSTEM INITIALIZATION</title>
+    <style>
+        /* 1. RESET AND FULLSCREEN SETUP */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden; /* No scrollbars */
+            font-family: 'Courier New', Courier, monospace;
+        }
 
+        /* 2. THE OVERLAY (Required for Audio) */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            color: #ff0044; /* Glitchy Red */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
+
+        .prompt {
+            text-align: center;
+            letter-spacing: 5px;
+            font-size: 2rem;
+            text-shadow: 0 0 10px #ff0044;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* 3. THE VIDEO CONTAINER (Fills screen) */
+        .video-wrapper {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none; /* Prevents clicking pause */
+        }
+
+        /* Scaling trick: Forces 16:9 video to cover any screen shape */
+        #player {
+            width: 100vw;
+            height: 56.25vw; /* 16:9 ratio */
+            min-height: 100vh;
+            min-width: 177.77vh; /* 16:9 ratio */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
 <body>
 
-    <!-- Overlays -->
-    <div id="grain"></div>
-    <div id="scanlines"></div>
-    <div id="vignette"></div>
-
-    <!-- Full screen GIF background -->
-    <div id="gifBg">
-        <img src="https://media1.tenor.com/m/XJ7xxA7TJVEAAAAC/eminence-in-shadow-i-am-atomic.gif" alt="I Am Atomic"
-            id="cidGif">
-        <div id="gifVig"></div>
+    <div id="overlay" onclick="startSystem()">
+        <div class="prompt">>> LINK START <<</div>
     </div>
 
-    <!-- Canvas for particle explosion -->
-    <canvas id="fxCanvas"></canvas>
-
-    <!-- Screen shake wrapper -->
-    <div id="shakeWrap">
-
-        <!-- Pre-text: "I AM..." whisper -->
-        <div id="preText">
-            <span class="iAm">I &nbsp;A M</span>
-        </div>
-
-        <!-- THE NAME — Main event -->
-        <div id="nameReveal">
-            <div id="nameGlitch">
-                <h1 id="mainName">
-                    <span class="letter" style="--i:0">R</span>
-                    <span class="letter" style="--i:1">Y</span>
-                    <span class="letter" style="--i:2">Z</span>
-                    <span class="letter" style="--i:3">E</span>
-                    <span class="letter" style="--i:4">N</span>
-                    <span class="spacer"></span>
-                    <span class="letter" style="--i:5">F</span>
-                    <span class="letter" style="--i:6">E</span>
-                    <span class="letter" style="--i:7">L</span>
-                    <span class="letter" style="--i:8">I</span>
-                    <span class="letter" style="--i:9">X</span>
-                </h1>
-            </div>
-            <!-- Sub text -->
-            <p id="subText">A &nbsp;T &nbsp;O &nbsp;M &nbsp;I &nbsp;C</p>
-        </div>
-
-        <!-- Impact flash -->
-        <div id="impactFlash"></div>
-
-        <!-- Shockwave ring -->
-        <div id="shockwave"></div>
-
-        <!-- Purple energy burst lines -->
-        <div class="burstLine bl1"></div>
-        <div class="burstLine bl2"></div>
-        <div class="burstLine bl3"></div>
-        <div class="burstLine bl4"></div>
-        <div class="burstLine bl5"></div>
-        <div class="burstLine bl6"></div>
-        <div class="burstLine bl7"></div>
-        <div class="burstLine bl8"></div>
-        <div class="burstLine bl9"></div>
-        <div class="burstLine bl10"></div>
-        <div class="burstLine bl11"></div>
-        <div class="burstLine bl12"></div>
-
+    <div class="video-wrapper">
+        <div id="player"></div>
     </div>
 
-    <!-- Chromatic aberration layer -->
-    <div id="chromatic"></div>
+    <script src="https://www.youtube.com/iframe_api"></script>
 
-    <!-- After-glitch flickers -->
-    <div id="afterGlitch"></div>
+    <script>
+        var player;
+        const targetID = 'YNsbOC4kaTA'; // Your Video ID
 
-    <!-- Click to replay -->
-    <div id="replayHint">[ CLICK TO REPLAY ]</div>
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: targetID,
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,      // Hide YT buttons
+                    'rel': 0,           // No related videos
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'loop': 1,          // Loop enabled
+                    'playlist': targetID, // Required for loop
+                    'iv_load_policy': 3  // Hide annotations
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
 
-    <script src="script.js"></script>
+        function onPlayerReady(event) {
+            console.log("System Ready.");
+        }
+
+        function startSystem() {
+            // Hide overlay
+            const ov = document.getElementById('overlay');
+            ov.style.opacity = '0';
+            setTimeout(() => { ov.style.display = 'none'; }, 1000);
+
+            // Play with Audio
+            player.unMute();
+            player.playVideo();
+        }
+    </script>
+
 </body>
-
 </html>
