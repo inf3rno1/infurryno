@@ -1,23 +1,22 @@
+/* ═══════════════════════════════════════════
+   I AM ATOMIC — RYZEN FELIX
+   Cid Kagenou Energy Release Animation
+   ═══════════════════════════════════════════ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    user-select: none;
+    user-select: none
 }
 
 :root {
-    --p: #7c2dff;
-    --p2: #a855f7;
-    --c: #00d4ff;
-    --r: #ff2d55;
-    --g: #00ff88;
+    --purple: #7c2dff;
+    --violet: #a855f7;
+    --cyan: #00d4ff;
+    --red: #ff2d55;
     --gold: #ffd700;
-    --pink: #ff6b9d;
     --pg: rgba(124, 45, 255, 0.7);
-    --bg: #000008;
-    --glow-p: 0 0 20px rgba(124, 45, 255, 0.6);
-    --glow-c: 0 0 20px rgba(0, 212, 255, 0.6);
-    --glow-r: 0 0 20px rgba(255, 45, 85, 0.6);
+    --deep: #0a0020;
 }
 
 html,
@@ -25,24 +24,22 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: var(--bg);
-    font-family: 'Rajdhani', sans-serif;
-    color: #fff;
-    cursor: crosshair;
+    background: #000;
+    cursor: none
 }
 
 /* ═══ OVERLAYS ═══ */
-#noise {
+#grain {
     position: fixed;
     inset: 0;
     z-index: 9999;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    animation: noiseShift 0.15s steps(3) infinite;
+    animation: grainShift 0.15s steps(3) infinite
 }
 
-@keyframes noiseShift {
+@keyframes grainShift {
     0% {
         transform: translate(0)
     }
@@ -60,337 +57,131 @@ body {
     }
 }
 
-#scan {
+#scanlines {
     position: fixed;
     inset: 0;
     z-index: 9998;
     pointer-events: none;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.07) 2px, rgba(0, 0, 0, 0.07) 4px);
-    animation: scanDrift 8s linear infinite;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px)
 }
 
-@keyframes scanDrift {
-    0% {
-        transform: translateY(0)
-    }
-
-    100% {
-        transform: translateY(4px)
-    }
-}
-
-#vhsScan {
+#vignette {
     position: fixed;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 8px;
+    inset: 0;
     z-index: 9997;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent, rgba(124, 45, 255, 0.15), rgba(0, 212, 255, 0.1), transparent);
-    animation: vhsScanLine 4s linear infinite;
+    background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.7) 100%)
 }
 
-@keyframes vhsScanLine {
-    0% {
-        top: -5%
-    }
-
-    100% {
-        top: 105%
-    }
-}
-
-/* ═══ GLOBAL GLITCH LAYER ═══ */
-#glitchLayer {
+/* ═══ GIF BACKGROUND ═══ */
+#gifBg {
     position: fixed;
     inset: 0;
-    z-index: 9996;
-    pointer-events: none;
-    opacity: 0;
-    animation: globalGlitch 8s ease infinite;
+    z-index: 1
 }
 
-@keyframes globalGlitch {
-
-    0%,
-    92%,
-    100% {
-        opacity: 0
-    }
-
-    93% {
-        opacity: 1;
-        transform: translate(-3px, 1px);
-        filter: hue-rotate(90deg)
-    }
-
-    94% {
-        opacity: 0.8;
-        transform: translate(2px, -2px);
-        filter: hue-rotate(-90deg)
-    }
-
-    95% {
-        opacity: 0;
-        transform: none;
-        filter: none
-    }
-}
-
-/* ═══ CURSOR HALO ═══ */
-#halo {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9990;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(124, 45, 255, 0.06) 0%, transparent 65%);
-    transform: translate(-50%, -50%);
-    animation: haloPulse 3s ease infinite;
-}
-
-@keyframes haloPulse {
-
-    0%,
-    100% {
-        opacity: 0.8;
-        transform: translate(-50%, -50%) scale(1)
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.05)
-    }
-}
-
-#haloRing {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9989;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(124, 45, 255, 0.3);
-    transform: translate(-50%, -50%);
-    animation: haloRingSpin 4s linear infinite;
-    transition: width 0.3s, height 0.3s;
-}
-
-@keyframes haloRingSpin {
-    to {
-        transform: translate(-50%, -50%) rotate(360deg)
-    }
-}
-
-/* ═══ MATRIX RAIN CANVAS ═══ */
-#matrixCanvas {
-    position: fixed;
-    inset: 0;
-    z-index: 7999;
-    pointer-events: none;
-    opacity: 0.4;
-    animation: matrixFade 1s ease forwards;
-}
-
-@keyframes matrixFade {
-    from {
-        opacity: 0
-    }
-
-    to {
-        opacity: 0.4
-    }
-}
-
-/* ═══════════════════════════════════
-   PHASE 0 — BOOT SEQUENCE
-═══════════════════════════════════ */
-#phase0 {
-    position: fixed;
-    inset: 0;
-    z-index: 8000;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 12vw;
-    gap: 3px;
-    transition: opacity 0.6s;
-}
-
-#phase0.out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.bl {
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(9px, 1.2vw, 12px);
-    letter-spacing: 2px;
-    color: #0f0;
-    text-shadow: 0 0 8px #0f0;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    white-space: nowrap;
-}
-
-.bl.show {
-    opacity: 1;
-    transform: none;
-    animation: blGlitch 0.1s ease;
-}
-
-@keyframes blGlitch {
-    0% {
-        transform: translateX(-5px) skewX(-5deg)
-    }
-
-    50% {
-        transform: translateX(3px) skewX(3deg)
-    }
-
-    100% {
-        transform: none
-    }
-}
-
-.bl.dim {
-    color: rgba(0, 255, 0, 0.4);
-}
-
-.bl.hot {
-    color: #fff;
-    text-shadow: 0 0 15px #a855f7, 0 0 30px #a855f7;
-    animation: hotPulse 0.5s ease infinite alternate;
-}
-
-@keyframes hotPulse {
-    from {
-        text-shadow: 0 0 15px #a855f7, 0 0 30px #a855f7
-    }
-
-    to {
-        text-shadow: 0 0 25px #a855f7, 0 0 60px #a855f7, 0 0 100px rgba(168, 85, 247, 0.3)
-    }
-}
-
-#bcursor {
-    display: inline-block;
-    width: 7px;
-    height: 13px;
-    background: #0f0;
-    margin-left: 3px;
-    animation: bcur 0.5s step-end infinite;
-    vertical-align: middle;
-}
-
-@keyframes bcur {
-
-    0%,
-    100% {
-        opacity: 1
-    }
-
-    50% {
-        opacity: 0
-    }
-}
-
-.bootProgress {
-    width: 300px;
-    height: 2px;
-    margin-top: 15px;
-    background: rgba(0, 255, 0, 0.1);
-    border-radius: 2px;
-    overflow: hidden;
-    opacity: 0;
-    animation: bootBarIn 0.5s 1s ease forwards;
-}
-
-@keyframes bootBarIn {
-    to {
-        opacity: 1
-    }
-}
-
-.bootProgressFill {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, #0f0, var(--c), var(--p));
-    box-shadow: 0 0 10px #0f0;
-    border-radius: 2px;
-    animation: bootFill 1.8s 1.2s ease-out forwards;
-}
-
-@keyframes bootFill {
-    to {
-        width: 100%
-    }
-}
-
-/* ═══════════════════════════════════
-   PHASE 1 — CID KAGENOU ENTRANCE
-═══════════════════════════════════ */
-#phase1 {
-    position: fixed;
-    inset: 0;
-    z-index: 7000;
-    background: #000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.7s;
-    overflow: hidden;
-}
-
-#phase1.on {
-    opacity: 1;
-    pointer-events: all;
-}
-
-#phase1.out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.p1bg {
-    position: absolute;
-    inset: 0;
+#cidGif {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.45) contrast(1.3) saturate(1.5);
-    animation: p1bgZoom 6s ease-out forwards, p1bgShake 0.15s 0.5s ease 3;
+    filter: brightness(0.5) contrast(1.3) saturate(1.5)
 }
 
-@keyframes p1bgZoom {
-    from {
-        transform: scale(1.3)
+#gifVig {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, transparent 15%, rgba(0, 0, 0, 0.85) 100%),
+        linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 40%)
+}
+
+/* ═══ CANVAS ═══ */
+#fxCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none
+}
+
+/* ═══ SHAKE WRAPPER ═══ */
+#shakeWrap {
+    position: fixed;
+    inset: 0;
+    z-index: 50
+}
+
+#shakeWrap.shake {
+    animation: screenShake 0.5s ease
+}
+
+#shakeWrap.shake2 {
+    animation: screenShake2 0.3s ease
+}
+
+#shakeWrap.megaShake {
+    animation: megaShake 0.8s ease
+}
+
+@keyframes screenShake {
+    0% {
+        transform: translate(0)
     }
 
-    to {
-        transform: scale(1)
+    10% {
+        transform: translate(-8px, 5px) rotate(-0.5deg)
+    }
+
+    20% {
+        transform: translate(10px, -8px) rotate(0.5deg)
+    }
+
+    30% {
+        transform: translate(-12px, 3px) rotate(-1deg)
+    }
+
+    40% {
+        transform: translate(6px, -10px) rotate(0.3deg)
+    }
+
+    50% {
+        transform: translate(-4px, 8px) rotate(-0.2deg)
+    }
+
+    60% {
+        transform: translate(8px, -3px)
+    }
+
+    70% {
+        transform: translate(-6px, 6px)
+    }
+
+    80% {
+        transform: translate(3px, -4px)
+    }
+
+    90% {
+        transform: translate(-2px, 2px)
+    }
+
+    100% {
+        transform: translate(0)
     }
 }
 
-@keyframes p1bgShake {
+@keyframes screenShake2 {
     0% {
         transform: translate(0)
     }
 
     25% {
-        transform: translate(-3px, 2px)
+        transform: translate(-5px, 3px)
     }
 
     50% {
-        transform: translate(3px, -2px)
+        transform: translate(5px, -5px)
     }
 
     75% {
-        transform: translate(-2px, -1px)
+        transform: translate(-3px, 2px)
     }
 
     100% {
@@ -398,1203 +189,455 @@ body {
     }
 }
 
-.p1vig {
-    position: absolute;
+@keyframes megaShake {
+    0% {
+        transform: translate(0) scale(1)
+    }
+
+    5% {
+        transform: translate(-15px, 10px) rotate(-2deg) scale(1.02)
+    }
+
+    10% {
+        transform: translate(18px, -12px) rotate(2deg) scale(0.98)
+    }
+
+    15% {
+        transform: translate(-20px, 5px) rotate(-3deg) scale(1.03)
+    }
+
+    20% {
+        transform: translate(12px, -15px) rotate(1.5deg) scale(1.01)
+    }
+
+    25% {
+        transform: translate(-8px, 12px) rotate(-1deg) scale(0.99)
+    }
+
+    35% {
+        transform: translate(6px, -8px) rotate(0.5deg)
+    }
+
+    50% {
+        transform: translate(-4px, 5px)
+    }
+
+    70% {
+        transform: translate(2px, -2px)
+    }
+
+    100% {
+        transform: translate(0) scale(1)
+    }
+}
+
+/* ═══ PRE TEXT — "I AM" ═══ */
+#preText {
+    position: fixed;
     inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
     pointer-events: none;
-    background: radial-gradient(ellipse 65% 65% at 50% 50%, transparent, rgba(0, 0, 8, 0.88) 100%),
-        linear-gradient(to top, #000008 0%, transparent 45%),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, transparent 35%);
-    animation: vigPulse 3s ease infinite;
+    opacity: 0
 }
 
-@keyframes vigPulse {
-
-    0%,
-    100% {
-        opacity: 1
-    }
-
-    50% {
-        opacity: 0.85
-    }
+#preText.show {
+    opacity: 1
 }
 
-.p1wipe {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--p), var(--p2), var(--c), transparent);
-    box-shadow: 0 0 20px var(--pg), 0 0 50px var(--pg);
-    transform: scaleX(0);
-    transform-origin: left;
+#preText.hide {
     opacity: 0;
+    transition: opacity 0.15s
 }
 
-.p1wipe.w1 {
-    top: 25%;
-    animation: wipe 0.35s 0.2s ease forwards;
-}
-
-.p1wipe.w2 {
-    top: 50%;
-    animation: wipe 0.35s 0.35s ease forwards;
-}
-
-.p1wipe.w3 {
-    top: 75%;
-    animation: wipe 0.35s 0.5s ease forwards;
-}
-
-@keyframes wipe {
-    to {
-        transform: scaleX(1);
-        opacity: 1
-    }
-}
-
-/* Horizontal energy beams */
-.energyBeam {
-    position: absolute;
-    left: -100%;
-    height: 1px;
-    width: 200%;
-    pointer-events: none;
-    opacity: 0;
-    background: linear-gradient(90deg, transparent 0%, var(--c) 20%, var(--p) 50%, var(--c) 80%, transparent 100%);
-}
-
-.energyBeam.eb1 {
-    top: 20%;
-    animation: beamSweep 2s 0.8s ease-out forwards;
-}
-
-.energyBeam.eb2 {
-    top: 80%;
-    animation: beamSweep 2s 1.0s ease-out forwards;
-}
-
-.energyBeam.eb3 {
-    top: 40%;
-    animation: beamSweep 1.5s 1.3s ease-out forwards;
-}
-
-.energyBeam.eb4 {
-    top: 60%;
-    animation: beamSweep 1.5s 1.5s ease-out forwards;
-}
-
-@keyframes beamSweep {
-    0% {
-        left: -200%;
-        opacity: 0
-    }
-
-    30% {
-        opacity: 0.8
-    }
-
-    100% {
-        left: 200%;
-        opacity: 0
-    }
-}
-
-.p1hud {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: rgba(168, 85, 247, 0.5);
-    text-transform: uppercase;
-    animation: hudPulse 2s ease infinite, hudGlitch 6s ease infinite;
-}
-
-@keyframes hudPulse {
-
-    0%,
-    100% {
-        opacity: 0.5
-    }
-
-    50% {
-        opacity: 1;
-        color: var(--p2)
-    }
-}
-
-@keyframes hudGlitch {
-
-    0%,
-    90%,
-    100% {
-        transform: none
-    }
-
-    91% {
-        transform: translateX(-2px) skewX(-2deg)
-    }
-
-    92% {
-        transform: translateX(2px) skewX(2deg)
-    }
-
-    93% {
-        transform: none
-    }
-}
-
-.p1hud2 {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    text-align: right;
-}
-
-/* HUD corners */
-.hudCorner {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    pointer-events: none;
-    opacity: 0;
-    animation: hudCornerIn 0.5s ease forwards;
-}
-
-.hudCorner::before,
-.hudCorner::after {
-    content: '';
-    position: absolute;
-    background: var(--p2);
-}
-
-.hudCorner.hc-tl {
-    top: 15px;
-    left: 15px;
-    animation-delay: 0.3s;
-}
-
-.hudCorner.hc-tl::before {
-    top: 0;
-    left: 0;
-    width: 20px;
-    height: 1px;
-}
-
-.hudCorner.hc-tl::after {
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 20px;
-}
-
-.hudCorner.hc-tr {
-    top: 15px;
-    right: 15px;
-    animation-delay: 0.4s;
-}
-
-.hudCorner.hc-tr::before {
-    top: 0;
-    right: 0;
-    width: 20px;
-    height: 1px;
-}
-
-.hudCorner.hc-tr::after {
-    top: 0;
-    right: 0;
-    width: 1px;
-    height: 20px;
-}
-
-.hudCorner.hc-bl {
-    bottom: 55px;
-    left: 15px;
-    animation-delay: 0.5s;
-}
-
-.hudCorner.hc-bl::before {
-    bottom: 0;
-    left: 0;
-    width: 20px;
-    height: 1px;
-}
-
-.hudCorner.hc-bl::after {
-    bottom: 0;
-    left: 0;
-    width: 1px;
-    height: 20px;
-}
-
-.hudCorner.hc-br {
-    bottom: 55px;
-    right: 15px;
-    animation-delay: 0.6s;
-}
-
-.hudCorner.hc-br::before {
-    bottom: 0;
-    right: 0;
-    width: 20px;
-    height: 1px;
-}
-
-.hudCorner.hc-br::after {
-    bottom: 0;
-    right: 0;
-    width: 1px;
-    height: 20px;
-}
-
-@keyframes hudCornerIn {
-    from {
-        opacity: 0;
-        transform: scale(0.5)
-    }
-
-    to {
-        opacity: 0.6;
-        transform: scale(1)
-    }
-}
-
-.p1center {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    pointer-events: none;
-}
-
-.p1eye {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 10px;
-    color: var(--p2);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    opacity: 0;
-    animation: eyeReveal 0.8s ease forwards;
-    text-shadow: 0 0 20px var(--pg);
-}
-
-@keyframes eyeReveal {
-    0% {
-        opacity: 0;
-        letter-spacing: 30px;
-        filter: blur(5px)
-    }
-
-    100% {
-        opacity: 1;
-        letter-spacing: 10px;
-        filter: blur(0)
-    }
-}
-
-.p1name {
+.iAm {
     font-family: 'Orbitron', monospace;
-    font-size: clamp(72px, 13vw, 170px);
-    font-weight: 900;
-    line-height: 0.88;
-    color: #fff;
-    text-shadow: 0 0 60px rgba(124, 45, 255, 1), 0 0 140px rgba(124, 45, 255, 0.5), 0 0 280px rgba(124, 45, 255, 0.2);
-    opacity: 0;
-    transform: scale(0.75);
-    animation: namePop 0.65s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-        nameFloat 4s 1s ease-in-out infinite,
-        nameGlitch 8s 2s ease infinite;
+    font-size: clamp(30px, 5vw, 55px);
+    font-weight: 700;
+    color: rgba(168, 85, 247, 0.7);
+    letter-spacing: 20px;
+    text-transform: uppercase;
+    text-shadow: 0 0 40px var(--pg), 0 0 80px var(--pg);
+    animation: iAmPulse 0.6s ease infinite alternate
 }
 
-@keyframes namePop {
+@keyframes iAmPulse {
+    from {
+        text-shadow: 0 0 40px var(--pg), 0 0 80px var(--pg);
+        letter-spacing: 20px
+    }
+
     to {
-        opacity: 1;
-        transform: scale(1)
+        text-shadow: 0 0 60px var(--pg), 0 0 120px rgba(124, 45, 255, 0.5), 0 0 200px rgba(124, 45, 255, 0.2);
+        letter-spacing: 25px
     }
 }
 
-@keyframes nameFloat {
+/* ═══ THE NAME — MAIN EVENT ═══ */
+#nameReveal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    pointer-events: none;
+    opacity: 0
+}
 
-    0%,
-    100% {
-        transform: translateY(0)
+#nameReveal.go {
+    opacity: 1
+}
+
+#nameGlitch {
+    position: relative
+}
+
+#nameGlitch.glitching {
+    animation: nameGlitchAnim 0.1s steps(2) 6
+}
+
+@keyframes nameGlitchAnim {
+    0% {
+        transform: translate(-3px, 2px) skewX(-3deg);
+        filter: hue-rotate(90deg)
+    }
+
+    25% {
+        transform: translate(4px, -1px) skewX(2deg);
+        filter: hue-rotate(-60deg)
     }
 
     50% {
-        transform: translateY(-8px)
+        transform: translate(-2px, -3px) skewX(-1deg);
+        filter: hue-rotate(45deg)
+    }
+
+    75% {
+        transform: translate(3px, 1px) skewX(3deg);
+        filter: hue-rotate(-30deg)
+    }
+
+    100% {
+        transform: translate(0);
+        filter: hue-rotate(0)
     }
 }
 
-@keyframes nameGlitch {
+#mainName {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(50px, 12vw, 160px);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: clamp(5px, 1.5vw, 18px);
+    line-height: 1;
+    white-space: nowrap;
+    text-shadow: 0 0 80px rgba(124, 45, 255, 1), 0 0 160px rgba(124, 45, 255, 0.6),
+        0 0 300px rgba(124, 45, 255, 0.3), 0 0 500px rgba(124, 45, 255, 0.15);
+    animation: nameBreath 2s 1s ease-in-out infinite
+}
+
+@keyframes nameBreath {
+
+    0%,
+    100% {
+        text-shadow: 0 0 80px rgba(124, 45, 255, 1), 0 0 160px rgba(124, 45, 255, 0.6), 0 0 300px rgba(124, 45, 255, 0.3)
+    }
+
+    50% {
+        text-shadow: 0 0 100px rgba(168, 85, 247, 1), 0 0 200px rgba(124, 45, 255, 0.8), 0 0 400px rgba(124, 45, 255, 0.4), 0 0 600px rgba(0, 212, 255, 0.15)
+    }
+}
+
+/* Individual letter animations */
+.letter {
+    display: inline-block;
+    opacity: 0;
+    transform: scale(0) translateY(50px);
+    animation: none
+}
+
+.letter.pop {
+    animation: letterPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: calc(var(--i) * 0.035s)
+}
+
+@keyframes letterPop {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(80px) rotate(25deg);
+        text-shadow: 0 0 0 transparent
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4) translateY(-10px) rotate(-5deg);
+        text-shadow: 0 0 100px rgba(124, 45, 255, 1), 0 0 200px rgba(0, 212, 255, 0.8)
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0) rotate(0);
+        text-shadow: 0 0 80px rgba(124, 45, 255, 1), 0 0 160px rgba(124, 45, 255, 0.6)
+    }
+}
+
+.spacer {
+    display: inline-block;
+    width: clamp(15px, 3vw, 40px)
+}
+
+/* Persistent name effects after reveal */
+#mainName.live {
+    animation: nameBreath 2s ease-in-out infinite, nameGlitchPersist 8s ease infinite
+}
+
+@keyframes nameGlitchPersist {
 
     0%,
     88%,
     100% {
-        text-shadow: 0 0 60px rgba(124, 45, 255, 1), 0 0 140px rgba(124, 45, 255, 0.5)
+        transform: none;
+        filter: none
     }
 
     89% {
-        text-shadow: -3px 0 var(--c), 3px 0 var(--r), 0 0 60px rgba(124, 45, 255, 1);
-        transform: translateX(-2px)
+        transform: translateX(-4px) skewX(-2deg);
+        filter: hue-rotate(30deg)
     }
 
     90% {
-        text-shadow: 3px 0 var(--r), -3px 0 var(--c);
-        transform: translateX(2px)
+        transform: translateX(4px) skewX(2deg);
+        filter: hue-rotate(-30deg)
     }
 
     91% {
-        text-shadow: 0 0 60px rgba(124, 45, 255, 1);
-        transform: none
+        transform: none;
+        filter: none
     }
 }
 
-.p1sub {
+/* ═══ SUB TEXT — "A T O M I C" ═══ */
+#subText {
     font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 5px;
-    color: rgba(255, 255, 255, 0.3);
-    margin-top: 22px;
+    font-size: clamp(12px, 2vw, 22px);
+    letter-spacing: clamp(8px, 2vw, 25px);
+    color: rgba(168, 85, 247, 0.6);
     text-transform: uppercase;
+    margin-top: 20px;
     opacity: 0;
-    animation: subSlide 0.6s 0.65s ease forwards;
+    text-shadow: 0 0 20px var(--pg), 0 0 40px rgba(124, 45, 255, 0.3)
 }
 
-@keyframes subSlide {
+#subText.show {
+    animation: subReveal 0.5s 0.3s ease forwards
+}
+
+@keyframes subReveal {
     from {
         opacity: 0;
-        transform: translateY(15px)
+        letter-spacing: clamp(20px, 5vw, 60px);
+        filter: blur(8px)
     }
 
     to {
         opacity: 1;
-        transform: none
-    }
-}
-
-/* Loading bar */
-.p1bar {
-    position: absolute;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-}
-
-.p1track {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.p1fill {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--p), var(--p2), var(--c));
-    box-shadow: 0 0 18px var(--pg);
-    transition: width 0.04s linear;
-}
-
-.p1pct {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.25);
-    margin-top: 8px;
-    text-align: right;
-}
-
-/* Skip button */
-.skipbtn {
-    position: absolute;
-    bottom: 28px;
-    right: 32px;
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 4px;
-    color: rgba(255, 255, 255, 0.18);
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    animation: skipPulse 2s ease infinite;
-}
-
-.skipbtn:hover {
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 0 0 10px var(--pg);
-}
-
-@keyframes skipPulse {
-
-    0%,
-    100% {
-        opacity: 0.18
-    }
-
-    50% {
-        opacity: 0.4
-    }
-}
-
-/* ═══════════════════════════════════
-   PHASE 2 — KIRITO DUAL WIELD
-═══════════════════════════════════ */
-#phase2 {
-    position: fixed;
-    inset: 0;
-    z-index: 6000;
-    background: #000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s;
-    overflow: hidden;
-}
-
-#phase2.on {
-    opacity: 1;
-    pointer-events: all;
-}
-
-#phase2.out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.p2bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.35) contrast(1.2) saturate(0.7);
-    animation: p2z 3.5s ease-out, p2chromatic 0.2s 0.5s ease 2;
-}
-
-@keyframes p2z {
-    from {
-        transform: scale(1.3) rotate(2deg)
-    }
-
-    to {
-        transform: scale(1) rotate(0)
-    }
-}
-
-@keyframes p2chromatic {
-    0% {
-        filter: brightness(0.35) contrast(1.2) saturate(0.7)
-    }
-
-    50% {
-        filter: brightness(0.8) contrast(2) saturate(2) hue-rotate(20deg)
-    }
-
-    100% {
-        filter: brightness(0.35) contrast(1.2) saturate(0.7)
-    }
-}
-
-.p2vig {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 20%, rgba(0, 0, 8, 0.92) 100%),
-        linear-gradient(to top, #000008 0%, transparent 50%);
-}
-
-/* Sword slashes */
-.slash {
-    position: absolute;
-    left: -100%;
-    height: 2px;
-    pointer-events: none;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
-    opacity: 0;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
-}
-
-.sl1 {
-    top: 30%;
-    animation: slsh 0.22s 0.1s ease forwards;
-    transform: rotate(-15deg);
-}
-
-.sl2 {
-    top: 45%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--p2), transparent);
-    animation: slsh 0.22s 0.2s ease forwards;
-    box-shadow: 0 0 20px var(--pg);
-}
-
-.sl3 {
-    top: 55%;
-    animation: slsh 0.22s 0.3s ease forwards;
-    transform: rotate(10deg);
-}
-
-.sl4 {
-    top: 65%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--c), transparent);
-    animation: slshR 0.22s 0.35s ease forwards;
-    transform: rotate(-8deg);
-}
-
-.sl5 {
-    top: 40%;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, #fff, var(--p), transparent);
-    animation: slsh 0.18s 0.45s ease forwards;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
-}
-
-.sl6 {
-    top: 70%;
-    animation: slshR 0.2s 0.5s ease forwards;
-    transform: rotate(5deg);
-}
-
-@keyframes slsh {
-    to {
-        left: 100%;
-        opacity: 0.6
-    }
-}
-
-@keyframes slshR {
-    0% {
-        right: -100%;
-        opacity: 0
-    }
-
-    100% {
-        right: 100%;
-        opacity: 0.6
-    }
-}
-
-/* Impact flash */
-.impactFlash {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.9);
-    opacity: 0;
-    pointer-events: none;
-    animation: impactBurst 0.15s 0.4s ease forwards;
-}
-
-@keyframes impactBurst {
-    0% {
-        opacity: 0
-    }
-
-    30% {
-        opacity: 0.9
-    }
-
-    100% {
-        opacity: 0
-    }
-}
-
-/* Starburst */
-.starburst {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.8), transparent);
-    animation: starburstExpand 0.8s 0.45s ease-out forwards;
-}
-
-@keyframes starburstExpand {
-    0% {
-        width: 0;
-        height: 0;
-        opacity: 1;
-        transform: translate(-50%, -50%)
-    }
-
-    100% {
-        width: 200vw;
-        height: 200vw;
-        opacity: 0;
-        transform: translate(-50%, -50%)
-    }
-}
-
-.p2title {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    opacity: 0;
-    animation: p2ti 0.5s 0.6s ease forwards;
-}
-
-@keyframes p2ti {
-    from {
-        opacity: 0;
-        letter-spacing: 25px;
-        transform: scale(0.8)
-    }
-
-    to {
-        opacity: 1;
-        letter-spacing: 4px;
-        transform: scale(1)
-    }
-}
-
-.p2title h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(20px, 3.5vw, 44px);
-    font-weight: 700;
-    letter-spacing: 4px;
-    color: rgba(255, 255, 255, 0.85);
-    text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-    animation: titlePulse 2s 1s ease infinite;
-}
-
-@keyframes titlePulse {
-
-    0%,
-    100% {
-        text-shadow: 0 0 30px rgba(255, 255, 255, 0.4)
-    }
-
-    50% {
-        text-shadow: 0 0 60px rgba(168, 85, 247, 0.8), 0 0 120px rgba(124, 45, 255, 0.4)
-    }
-}
-
-.p2title p {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: var(--p2);
-    margin-top: 10px;
-    opacity: 0;
-    animation: p2subIn 0.4s 0.9s ease forwards;
-}
-
-@keyframes p2subIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px)
-    }
-
-    to {
-        opacity: 0.7;
-        transform: none
-    }
-}
-
-/* ═══════════════════════════════════
-   PHASE 3 — SAKUTA AZUSAGAWA
-═══════════════════════════════════ */
-#phase3S {
-    position: fixed;
-    inset: 0;
-    z-index: 5500;
-    background: #000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.8s;
-    overflow: hidden;
-}
-
-#phase3S.on {
-    opacity: 1;
-    pointer-events: all;
-}
-
-#phase3S.out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.p3Sbg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.4) contrast(1.15) saturate(1.3);
-    animation: p3SbgPan 5s ease-out forwards;
-}
-
-@keyframes p3SbgPan {
-    from {
-        transform: scale(1.2) translateX(-3%)
-    }
-
-    to {
-        transform: scale(1) translateX(0)
-    }
-}
-
-.p3Svig {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0, 0, 8, 0.9) 100%),
-        linear-gradient(to top, #000008 0%, transparent 50%);
-}
-
-/* Sakuta floating text */
-.sakutaQuote {
-    position: absolute;
-    bottom: 25%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    letter-spacing: 3px;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: center;
-    white-space: nowrap;
-    opacity: 0;
-    animation: quoteTypeIn 1s 0.5s ease forwards;
-}
-
-@keyframes quoteTypeIn {
-    from {
-        opacity: 0;
-        letter-spacing: 15px;
-        filter: blur(3px)
-    }
-
-    to {
-        opacity: 1;
-        letter-spacing: 3px;
+        letter-spacing: clamp(8px, 2vw, 25px);
         filter: blur(0)
     }
 }
 
-.sakutaTitle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(28px, 5vw, 60px);
-    font-weight: 900;
-    color: #fff;
-    text-align: center;
-    text-shadow: 0 0 40px rgba(0, 212, 255, 0.8), 0 0 100px rgba(0, 212, 255, 0.3);
-    opacity: 0;
-    animation: sakutaTitleIn 0.7s 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes sakutaTitleIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.7) rotateX(20deg)
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1) rotateX(0)
-    }
-}
-
-/* Petal particles */
-.petal {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(255, 107, 157, 0.8), transparent);
-    border-radius: 50% 0 50% 0;
-    transform: rotate(45deg);
-}
-
-.petal.pt1 {
-    top: 10%;
-    left: 20%;
-    animation: petalFall 4s 0s ease-in-out infinite;
-}
-
-.petal.pt2 {
-    top: 5%;
-    left: 40%;
-    animation: petalFall 5s 0.5s ease-in-out infinite;
-}
-
-.petal.pt3 {
-    top: 8%;
-    left: 60%;
-    animation: petalFall 4.5s 1s ease-in-out infinite;
-}
-
-.petal.pt4 {
-    top: 3%;
-    left: 80%;
-    animation: petalFall 3.5s 1.5s ease-in-out infinite;
-}
-
-.petal.pt5 {
-    top: 12%;
-    left: 30%;
-    animation: petalFall 6s 0.3s ease-in-out infinite;
-}
-
-.petal.pt6 {
-    top: 7%;
-    left: 70%;
-    animation: petalFall 5.5s 0.8s ease-in-out infinite;
-}
-
-.petal.pt7 {
-    top: 1%;
-    left: 50%;
-    animation: petalFall 4s 1.3s ease-in-out infinite;
-}
-
-.petal.pt8 {
-    top: 6%;
-    left: 15%;
-    animation: petalFall 5s 0.2s ease-in-out infinite;
-}
-
-@keyframes petalFall {
-    0% {
-        transform: rotate(45deg) translate(0, 0);
-        opacity: 0
-    }
-
-    10% {
-        opacity: 0.8
-    }
-
-    90% {
-        opacity: 0.6
-    }
-
-    100% {
-        transform: rotate(405deg) translate(100px, 100vh);
-        opacity: 0
-    }
-}
-
-/* ═══════════════════════════════════
-   PHASE 4 — NASA YUZAKI (TONIKAWA)
-═══════════════════════════════════ */
-#phase4 {
+/* ═══ IMPACT FLASH ═══ */
+#impactFlash {
     position: fixed;
     inset: 0;
-    z-index: 5200;
-    background: #000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.8s;
-    overflow: hidden;
-}
-
-#phase4.on {
-    opacity: 1;
-    pointer-events: all;
-}
-
-#phase4.out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.p4bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.4) contrast(1.2) saturate(1.4);
-    animation: p4bgFloat 6s ease-out forwards;
-}
-
-@keyframes p4bgFloat {
-    from {
-        transform: scale(1.15) translateY(3%)
-    }
-
-    to {
-        transform: scale(1) translateY(0)
-    }
-}
-
-.p4vig {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(0, 0, 8, 0.9) 100%),
-        linear-gradient(to top, #000008 0%, transparent 50%);
-}
-
-/* Stars */
-.star {
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: #fff;
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.star.s1 {
-    top: 10%;
-    left: 15%;
-    animation: starTwinkle 2s 0s ease infinite;
-}
-
-.star.s2 {
-    top: 20%;
-    left: 35%;
-    animation: starTwinkle 3s 0.3s ease infinite;
-}
-
-.star.s3 {
-    top: 8%;
-    left: 55%;
-    animation: starTwinkle 2.5s 0.6s ease infinite;
-}
-
-.star.s4 {
-    top: 25%;
-    left: 75%;
-    animation: starTwinkle 2s 0.9s ease infinite;
-}
-
-.star.s5 {
-    top: 15%;
-    left: 85%;
-    animation: starTwinkle 3.5s 0.2s ease infinite;
-}
-
-.star.s6 {
-    top: 30%;
-    left: 10%;
-    animation: starTwinkle 2s 1.2s ease infinite;
-}
-
-.star.s7 {
-    top: 5%;
-    left: 45%;
-    animation: starTwinkle 4s 0.4s ease infinite;
-}
-
-.star.s8 {
-    top: 18%;
-    left: 65%;
-    animation: starTwinkle 2.8s 0.7s ease infinite;
-}
-
-.star.s9 {
-    top: 12%;
-    left: 25%;
-    animation: starTwinkle 3.2s 1s ease infinite;
-}
-
-.star.s10 {
-    top: 22%;
-    left: 90%;
-    animation: starTwinkle 2.3s 0.5s ease infinite;
-}
-
-@keyframes starTwinkle {
-
-    0%,
-    100% {
-        opacity: 0.3;
-        transform: scale(1)
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.8);
-        box-shadow: 0 0 6px #fff
-    }
-}
-
-/* Heart particles */
-.heartParticle {
-    position: absolute;
-    font-size: 14px;
+    z-index: 500;
     pointer-events: none;
     opacity: 0;
-    color: var(--pink);
+    background: radial-gradient(circle at 50% 50%, #fff 0%, rgba(168, 85, 247, 0.8) 30%, rgba(124, 45, 255, 0.4) 60%, transparent 80%)
 }
 
-.heartParticle.hp1 {
-    bottom: 20%;
-    left: 20%;
-    animation: heartFloat 3s 0.5s ease infinite;
+#impactFlash.fire {
+    animation: impactBurst 0.35s ease forwards
 }
 
-.heartParticle.hp2 {
-    bottom: 30%;
-    left: 50%;
-    animation: heartFloat 4s 1s ease infinite;
-}
-
-.heartParticle.hp3 {
-    bottom: 25%;
-    left: 80%;
-    animation: heartFloat 3.5s 1.5s ease infinite;
-}
-
-.heartParticle.hp4 {
-    bottom: 15%;
-    left: 35%;
-    animation: heartFloat 5s 0.3s ease infinite;
-}
-
-.heartParticle.hp5 {
-    bottom: 35%;
-    left: 65%;
-    animation: heartFloat 4.5s 0.8s ease infinite;
-}
-
-@keyframes heartFloat {
+@keyframes impactBurst {
     0% {
         opacity: 0;
-        transform: translateY(0) scale(0.5)
-    }
-
-    20% {
-        opacity: 0.8
-    }
-
-    80% {
-        opacity: 0.4
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(-200px) scale(1.2) rotate(20deg)
-    }
-}
-
-.p4title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    opacity: 0;
-    animation: p4titleIn 0.8s 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes p4titleIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.6)
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1)
-    }
-}
-
-.p4title h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(24px, 4vw, 50px);
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 0 0 40px rgba(255, 107, 157, 0.8), 0 0 100px rgba(255, 107, 157, 0.3);
-    animation: p4glow 3s ease infinite;
-}
-
-@keyframes p4glow {
-
-    0%,
-    100% {
-        text-shadow: 0 0 40px rgba(255, 107, 157, 0.8)
-    }
-
-    50% {
-        text-shadow: 0 0 80px rgba(255, 107, 157, 1), 0 0 150px rgba(255, 107, 157, 0.5)
-    }
-}
-
-.p4title p {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 4px;
-    color: var(--pink);
-    margin-top: 10px;
-    opacity: 0;
-    animation: p4subIn 0.5s 1s ease forwards;
-}
-
-@keyframes p4subIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px)
-    }
-
-    to {
-        opacity: 0.7;
-        transform: none
-    }
-}
-
-/* ═══════════════════════════════════
-   PHASE 5 — DRAGON CANVAS
-═══════════════════════════════════ */
-#phase5 {
-    position: fixed;
-    inset: 0;
-    z-index: 5000;
-    background: transparent;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.8s;
-}
-
-#phase5.on {
-    opacity: 1;
-    pointer-events: all;
-}
-
-#phase5.out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#dragonCanvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-}
-
-/* ═══════════════════════════════════
-   TRANSITION FLASH
-═══════════════════════════════════ */
-.transitionFlash {
-    position: fixed;
-    inset: 0;
-    z-index: 9500;
-    pointer-events: none;
-    background: linear-gradient(45deg, var(--p), var(--c));
-    opacity: 0;
-    animation: transFlash 0.3s ease forwards;
-}
-
-@keyframes transFlash {
-    0% {
-        opacity: 0
+        transform: scale(0.3)
     }
 
     15% {
+        opacity: 1;
+        transform: scale(1)
+    }
+
+    30% {
+        opacity: 0.8;
+        transform: scale(1.1)
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.5)
+    }
+}
+
+/* ═══ SHOCKWAVE ═══ */
+#shockwave {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 250;
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    border: 3px solid rgba(168, 85, 247, 0.8);
+    box-shadow: 0 0 30px rgba(124, 45, 255, 0.6), 0 0 60px rgba(0, 212, 255, 0.3),
+        inset 0 0 30px rgba(124, 45, 255, 0.4);
+    transform: translate(-50%, -50%);
+    opacity: 0
+}
+
+#shockwave.expand {
+    animation: shockwaveExpand 0.8s ease-out forwards
+}
+
+@keyframes shockwaveExpand {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+        border-width: 4px
+    }
+
+    50% {
+        opacity: 0.6;
+        border-width: 2px
+    }
+
+    100% {
+        width: 250vw;
+        height: 250vw;
+        opacity: 0;
+        border-width: 1px
+    }
+}
+
+/* ═══ BURST LINES ═══ */
+.burstLine {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 220;
+    pointer-events: none;
+    height: 3px;
+    width: 0;
+    transform-origin: left center;
+    opacity: 0;
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.9), rgba(0, 212, 255, 0.6), transparent);
+    box-shadow: 0 0 15px var(--pg)
+}
+
+.burstLine.fire {
+    animation: burstExpand 0.6s ease-out forwards
+}
+
+.bl1 {
+    transform: translate(-50%, -50%) rotate(0deg)
+}
+
+.bl2 {
+    transform: translate(-50%, -50%) rotate(30deg)
+}
+
+.bl3 {
+    transform: translate(-50%, -50%) rotate(60deg)
+}
+
+.bl4 {
+    transform: translate(-50%, -50%) rotate(90deg)
+}
+
+.bl5 {
+    transform: translate(-50%, -50%) rotate(120deg)
+}
+
+.bl6 {
+    transform: translate(-50%, -50%) rotate(150deg)
+}
+
+.bl7 {
+    transform: translate(-50%, -50%) rotate(180deg)
+}
+
+.bl8 {
+    transform: translate(-50%, -50%) rotate(210deg)
+}
+
+.bl9 {
+    transform: translate(-50%, -50%) rotate(240deg)
+}
+
+.bl10 {
+    transform: translate(-50%, -50%) rotate(270deg)
+}
+
+.bl11 {
+    transform: translate(-50%, -50%) rotate(300deg)
+}
+
+.bl12 {
+    transform: translate(-50%, -50%) rotate(330deg)
+}
+
+@keyframes burstExpand {
+    0% {
+        width: 0;
+        opacity: 1
+    }
+
+    40% {
         opacity: 0.8
+    }
+
+    100% {
+        width: 150vw;
+        opacity: 0
+    }
+}
+
+/* ═══ CHROMATIC ABERRATION ═══ */
+#chromatic {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: screen
+}
+
+#chromatic.fire {
+    animation: chromaticFire 0.4s ease forwards
+}
+
+@keyframes chromaticFire {
+    0% {
+        opacity: 0
+    }
+
+    20% {
+        opacity: 0.7;
+        background: linear-gradient(90deg, rgba(255, 0, 0, 0.15) 0%, transparent 33%, transparent 66%, rgba(0, 100, 255, 0.15) 100%)
+    }
+
+    40% {
+        opacity: 0.5;
+        background: linear-gradient(90deg, rgba(0, 100, 255, 0.1) 0%, transparent 33%, transparent 66%, rgba(255, 0, 0, 0.1) 100%)
     }
 
     100% {
@@ -1602,29 +645,84 @@ body {
     }
 }
 
-/* Cinematic bars */
-.cinemaBars {
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 50;
+/* ═══ AFTER GLITCH ═══ */
+#afterGlitch {
+    position: fixed;
+    inset: 0;
+    z-index: 350;
     pointer-events: none;
-    background: #000;
-    animation: cinemaSlide 0.8s ease forwards;
+    opacity: 0
 }
 
-.cinemaBars.top {
-    top: 0;
-    height: 0;
+#afterGlitch.fire {
+    animation: afterGlitchAnim 2s ease forwards
 }
 
-.cinemaBars.bottom {
-    bottom: 0;
-    height: 0;
+@keyframes afterGlitchAnim {
+
+    0%,
+    15%,
+    25%,
+    35%,
+    100% {
+        opacity: 0;
+        transform: none
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateX(-5px);
+        background: rgba(168, 85, 247, 0.05)
+    }
+
+    20% {
+        opacity: 0.8;
+        transform: translateX(5px);
+        background: rgba(0, 212, 255, 0.05)
+    }
+
+    30% {
+        opacity: 0.6;
+        transform: translateX(-3px);
+        background: rgba(255, 45, 85, 0.03)
+    }
 }
 
-@keyframes cinemaSlide {
-    to {
-        height: 12%
+/* ═══ REPLAY HINT ═══ */
+#replayHint {
+    position: fixed;
+    bottom: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 600;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: rgba(168, 85, 247, 0.2);
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: color 0.3s
+}
+
+#replayHint.show {
+    opacity: 1;
+    pointer-events: all;
+    animation: replayPulse 2s ease infinite
+}
+
+#replayHint:hover {
+    color: rgba(168, 85, 247, 0.6)
+}
+
+@keyframes replayPulse {
+
+    0%,
+    100% {
+        opacity: 0.2
+    }
+
+    50% {
+        opacity: 0.5
     }
 }
