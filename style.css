@@ -1,4 +1,115 @@
 /* ============================================
+   PRELOADER ANIMATIONS
+   ============================================ */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a0a0f, #1a1a2e);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: preloaderFadeOut 0.5s ease-out 3s forwards;
+}
+
+.preloader-content {
+    text-align: center;
+    position: relative;
+}
+
+.preloader-logo {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--tertiary-color));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: preloaderLogoPulse 1s ease-in-out infinite, preloaderLogoGlow 2s ease-in-out infinite;
+    margin-bottom: 30px;
+    letter-spacing: 0.2em;
+}
+
+.preloader-bar {
+    width: 300px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto;
+    position: relative;
+}
+
+.preloader-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--tertiary-color));
+    background-size: 200% 100%;
+    border-radius: 10px;
+    animation: preloaderProgress 3s ease-out forwards, preloaderGradient 2s linear infinite;
+    width: 0%;
+    box-shadow: 0 0 20px var(--primary-color);
+}
+
+.preloader-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+@keyframes preloaderFadeOut {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+@keyframes preloaderLogoPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes preloaderLogoGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 20px var(--primary-color));
+    }
+    50% {
+        filter: drop-shadow(0 0 40px var(--secondary-color)) drop-shadow(0 0 60px var(--tertiary-color));
+    }
+}
+
+@keyframes preloaderProgress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes preloaderGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+/* ============================================
    GLOBAL STYLES & RESET
    ============================================ */
 * {
@@ -21,15 +132,74 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--dark-bg);
+    background-image: url('https://i.ibb.co/dwktpr5k/JKOpcb-Bf-L2h-K5-Q7l-Dp2w-Om-Q8-DTGzt9l4-u-USI6-Lzz-I.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: var(--text-primary);
     overflow-x: hidden;
     position: relative;
     min-height: 100vh;
 }
 
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 15, 0.6);
+    z-index: 0;
+    pointer-events: none;
+    animation: backgroundFadeIn 2s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes backgroundFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(255, 0, 128, 0.1) 50%, rgba(10, 10, 15, 0.8) 100%);
+    z-index: 0;
+    pointer-events: none;
+    animation: backgroundRadialPulse 4s ease-in-out infinite;
+}
+
+@keyframes backgroundRadialPulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
 .main-container {
     position: relative;
     z-index: 10;
+    opacity: 0;
+    animation: fadeInMain 1s ease-out 0.5s forwards;
+}
+
+@keyframes fadeInMain {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* ============================================
@@ -44,6 +214,19 @@ body {
     z-index: 1;
     pointer-events: none;
     overflow: hidden;
+    animation: particleContainerEntrance 2s ease-out 0.5s forwards;
+    opacity: 0;
+}
+
+@keyframes particleContainerEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .particle {
@@ -182,7 +365,36 @@ body {
     height: 200px;
     z-index: 5;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0;
+    animation: dragonEntrance 2s ease-out forwards;
+}
+
+.dragon-1 {
+    animation-delay: 0.2s;
+    transform: translateX(-300px) translateY(-300px) rotate(-45deg);
+}
+
+.dragon-2 {
+    animation-delay: 0.4s;
+    transform: translateX(300px) translateY(-300px) rotate(45deg);
+}
+
+.dragon-3 {
+    animation-delay: 0.6s;
+    transform: translateX(-300px) translateY(300px) rotate(45deg);
+}
+
+@keyframes dragonEntrance {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.6;
+        transform: translate(0, 0) rotate(0deg);
+    }
 }
 
 .dragon-1 {
@@ -284,6 +496,43 @@ body {
     pointer-events: none;
     z-index: 3;
     filter: blur(40px);
+    opacity: 0;
+    animation: orbEntrance 2s ease-out forwards;
+}
+
+.orb-1 {
+    animation-delay: 0.1s;
+    transform: translate(-500px, -500px) scale(0);
+}
+
+.orb-2 {
+    animation-delay: 0.3s;
+    transform: translate(500px, -500px) scale(0);
+}
+
+.orb-3 {
+    animation-delay: 0.5s;
+    transform: translate(-500px, 500px) scale(0);
+}
+
+.orb-4 {
+    animation-delay: 0.7s;
+    transform: translate(500px, 500px) scale(0);
+}
+
+.orb-5 {
+    animation-delay: 0.9s;
+    transform: translate(0, -500px) scale(0);
+}
+
+@keyframes orbEntrance {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
 }
 
 .orb-1 {
@@ -426,6 +675,23 @@ body {
     justify-content: center;
     overflow: hidden;
     background: radial-gradient(ellipse at center, rgba(255, 0, 128, 0.1), transparent);
+    animation: billboardEntrance 1.5s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes billboardEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .billboard-content {
@@ -447,18 +713,50 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: titleGradient 5s ease infinite, titlePulse 2s ease-in-out infinite, titleGlow 3s ease-in-out infinite;
+    animation: titleGradient 5s ease infinite, titlePulse 2s ease-in-out infinite, titleGlow 3s ease-in-out infinite, titleSlideInLeft 1.2s ease-out 0.3s forwards;
     text-shadow: 0 0 40px rgba(255, 0, 128, 0.5);
     letter-spacing: 0.1em;
     margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateX(-200px);
+}
+
+@keyframes titleSlideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-200px) scale(0.5);
+    }
+    60% {
+        transform: translateX(20px) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
 }
 
 .title-sub {
     font-size: clamp(1.5rem, 4vw, 3rem);
     font-weight: 300;
     color: var(--text-secondary);
-    animation: titleFade 4s ease-in-out infinite, titleSlide 3s ease-in-out infinite;
+    animation: titleFade 4s ease-in-out infinite, titleSlide 3s ease-in-out infinite, titleSlideInRight 1.2s ease-out 0.6s forwards;
     letter-spacing: 0.2em;
+    opacity: 0;
+    transform: translateX(200px);
+}
+
+@keyframes titleSlideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(200px) scale(0.5);
+    }
+    60% {
+        transform: translateX(-20px) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
 }
 
 .billboard-glow {
@@ -471,8 +769,24 @@ body {
     background: radial-gradient(circle, var(--primary-color), transparent);
     border-radius: 50%;
     filter: blur(80px);
-    animation: billboardGlow 4s ease-in-out infinite, billboardPulse 3s ease-in-out infinite;
+    animation: billboardGlow 4s ease-in-out infinite, billboardPulse 3s ease-in-out infinite, billboardGlowEntrance 2s ease-out 1s forwards;
     z-index: 1;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+@keyframes billboardGlowEntrance {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 .billboard-particles {
@@ -566,6 +880,23 @@ body {
     align-items: center;
     min-height: 100vh;
     position: relative;
+    animation: profileSectionEntrance 1.5s ease-out 1s forwards;
+    opacity: 0;
+    transform: translateY(100px);
+}
+
+@keyframes profileSectionEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(100px) scale(0.9);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .profile-card {
@@ -579,8 +910,24 @@ body {
     background-clip: padding-box;
     backdrop-filter: blur(20px);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: profileCardFloat 6s ease-in-out infinite, profileCardGlow 4s ease-in-out infinite;
+    animation: profileCardFloat 6s ease-in-out infinite, profileCardGlow 4s ease-in-out infinite, profileCardEntrance 1.2s ease-out 1.2s forwards;
     overflow: hidden;
+    opacity: 0;
+    transform: scale(0) rotate(180deg);
+}
+
+@keyframes profileCardEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(180deg);
+    }
+    60% {
+        transform: scale(1.1) rotate(-10deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
 }
 
 .profile-card::before {
@@ -806,6 +1153,20 @@ body {
 .characters-section {
     padding: 100px 20px;
     position: relative;
+    animation: charactersSectionEntrance 1.5s ease-out 1.5s forwards;
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+@keyframes charactersSectionEntrance {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px) rotateY(-15deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) rotateY(0deg);
+    }
 }
 
 .section-title {
@@ -851,7 +1212,38 @@ body {
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s ease;
-    animation: characterCardFloat 6s ease-in-out infinite;
+    animation: characterCardFloat 6s ease-in-out infinite, characterCardEntrance 1s ease-out forwards;
+    opacity: 0;
+}
+
+.character-card:nth-child(1) { 
+    animation-delay: 2s, 2s; 
+    transform: translateX(-200px);
+}
+
+.character-card:nth-child(2) { 
+    animation-delay: 1s, 2.2s; 
+    transform: translateY(200px);
+}
+
+.character-card:nth-child(3) { 
+    animation-delay: 1s, 2.4s; 
+    transform: translateX(200px);
+}
+
+.character-card:nth-child(4) { 
+    animation-delay: 1.5s, 2.6s; 
+    transform: translateY(-200px);
+}
+
+@keyframes characterCardEntrance {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
 }
 
 .character-card:nth-child(1) { animation-delay: 0s; }
@@ -1163,6 +1555,20 @@ body {
 .showcase-section {
     padding: 100px 20px;
     position: relative;
+    animation: showcaseSectionEntrance 1.5s ease-out 2.8s forwards;
+    opacity: 0;
+    transform: translateY(100px);
+}
+
+@keyframes showcaseSectionEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(100px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .showcase-grid {
@@ -1183,7 +1589,38 @@ body {
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    animation: showcaseItemFloat 5s ease-in-out infinite, showcaseItemGlow 4s ease-in-out infinite;
+    animation: showcaseItemFloat 5s ease-in-out infinite, showcaseItemGlow 4s ease-in-out infinite, showcaseItemEntrance 1s ease-out forwards;
+    opacity: 0;
+}
+
+.showcase-item:nth-child(1) { 
+    animation-delay: 0s, 0s, 3s; 
+    transform: translateX(-300px);
+}
+
+.showcase-item:nth-child(2) { 
+    animation-delay: 0.5s, 0.5s, 3.2s; 
+    transform: translateY(300px);
+}
+
+.showcase-item:nth-child(3) { 
+    animation-delay: 1s, 1s, 3.4s; 
+    transform: translateX(300px);
+}
+
+.showcase-item:nth-child(4) { 
+    animation-delay: 1.5s, 1.5s, 3.6s; 
+    transform: translateY(-300px);
+}
+
+@keyframes showcaseItemEntrance {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
 }
 
 .showcase-item:nth-child(1) { animation-delay: 0s; }
@@ -1291,6 +1728,20 @@ body {
     flex-wrap: wrap;
     gap: 50px;
     perspective: 1000px;
+    animation: elementsSectionEntrance 1.5s ease-out 3.2s forwards;
+    opacity: 0;
+    transform: scale(0) rotate(180deg);
+}
+
+@keyframes elementsSectionEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
 }
 
 .element-cube {
@@ -1420,7 +1871,43 @@ body {
     position: absolute;
     border-radius: 50%;
     border: 2px solid;
-    opacity: 0.1;
+    opacity: 0;
+    animation: bgCircleEntrance 2s ease-out forwards;
+}
+
+.circle-1 {
+    animation-delay: 0.2s;
+    transform: scale(0) translate(-200px, -200px);
+}
+
+.circle-2 {
+    animation-delay: 0.4s;
+    transform: scale(0) translate(200px, -200px);
+}
+
+.circle-3 {
+    animation-delay: 0.6s;
+    transform: scale(0) translate(-200px, 200px);
+}
+
+.circle-4 {
+    animation-delay: 0.8s;
+    transform: scale(0) translate(200px, 200px);
+}
+
+.circle-5 {
+    animation-delay: 1s;
+    transform: scale(0);
+}
+
+@keyframes bgCircleEntrance {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.1;
+        transform: scale(1) translate(0, 0);
+    }
 }
 
 .circle-1 {
