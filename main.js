@@ -564,9 +564,127 @@ class CharacterImageLoader {
 }
 
 // ============================================
+// PRELOADER HANDLER
+// ============================================
+class Preloader {
+    constructor() {
+        this.preloader = document.getElementById('preloader');
+        this.init();
+    }
+
+    init() {
+        // Create explosion particles on preloader
+        this.createPreloaderParticles();
+        
+        // Remove preloader after animation
+        setTimeout(() => {
+            if (this.preloader) {
+                this.preloader.style.display = 'none';
+                this.createEntranceExplosion();
+            }
+        }, 3500);
+    }
+
+    createPreloaderParticles() {
+        const container = document.querySelector('.preloader-particles');
+        if (!container) return;
+
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.borderRadius = '50%';
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.background = ['#ff0080', '#00ff80', '#8000ff', '#ff8000'][Math.floor(Math.random() * 4)];
+            particle.style.pointerEvents = 'none';
+            
+            const angle = (Math.PI * 2 * i) / 50;
+            const distance = 100 + Math.random() * 200;
+            const duration = 1 + Math.random() * 2;
+            
+            particle.style.animation = `preloaderParticleFloat ${duration}s ease-out forwards`;
+            particle.style.setProperty('--angle', angle);
+            particle.style.setProperty('--distance', distance + 'px');
+            
+            container.appendChild(particle);
+        }
+    }
+
+    createEntranceExplosion() {
+        // Create massive explosion effect when preloader finishes
+        for (let i = 0; i < 100; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 8 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.borderRadius = '50%';
+            particle.style.left = '50%';
+            particle.style.top = '50%';
+            particle.style.background = ['#ff0080', '#00ff80', '#8000ff', '#ff8000'][Math.floor(Math.random() * 4)];
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9998';
+            particle.style.transform = 'translate(-50%, -50%)';
+            
+            const angle = (Math.PI * 2 * i) / 100;
+            const velocity = 3 + Math.random() * 5;
+            const vx = Math.cos(angle) * velocity;
+            const vy = Math.sin(angle) * velocity;
+            
+            document.body.appendChild(particle);
+            
+            let x = window.innerWidth / 2;
+            let y = window.innerHeight / 2;
+            let opacity = 1;
+            
+            const animate = () => {
+                x += vx * 10;
+                y += vy * 10;
+                opacity -= 0.02;
+                
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.opacity = opacity;
+                particle.style.transform = `translate(-50%, -50%) scale(${1 + (1 - opacity)})`;
+                
+                if (opacity > 0 && x > 0 && x < window.innerWidth && y > 0 && y < window.innerHeight) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            };
+            
+            setTimeout(() => animate(), i * 10);
+        }
+    }
+}
+
+// Add preloader particle animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes preloaderParticleFloat {
+        0% {
+            transform: translate(-50%, -50%) translate(0, 0) scale(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-50%, -50%) translate(
+                calc(cos(var(--angle)) * var(--distance)),
+                calc(sin(var(--angle)) * var(--distance))
+            ) scale(1);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// ============================================
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Preloader
+    new Preloader();
     // Initialize Character Image Loader
     new CharacterImageLoader();
     
