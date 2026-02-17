@@ -1,45 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryzen Felix.</title>
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: black;
-        }
-
-        .video-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+    <title>Inferno - Anime Legends Showcase</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/YNsbOC4kaTA?autoplay=1&rel=0&modestbranding=1"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-        </iframe>
-    </div>
-</body>
+    <!-- Particle Background -->
+    <div class="particle-container" id="particles"></div>
+    
+    <!-- Dragon Elements -->
+    <div class="dragon dragon-1"></div>
+    <div class="dragon dragon-2"></div>
+    <div class="dragon dragon-3"></div>
+    
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="orb orb-5"></div>
+    
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Billboard Section -->
+        <section class="billboard">
+            <div class="billboard-content">
+                <div class="billboard-title">
+                    <h1 class="title-main">INFERNO</h1>
+                    <h2 class="title-sub">Anime Legends Collection</h2>
+                </div>
+                <div class="billboard-particles"></div>
+                <div class="billboard-glow"></div>
+            </div>
+        </section>
 
+        <!-- Profile Card Section -->
+        <section class="profile-section">
+            <div class="profile-card">
+                <div class="profile-glow"></div>
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <div class="avatar-ring"></div>
+                        <div class="avatar-core"></div>
+                    </div>
+                    <h2 class="profile-name">INFERNO</h2>
+                    <div class="profile-title">Senior Animation Developer</div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">200+</div>
+                        <div class="stat-label">Animations</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">Creativity</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Quality</div>
+                    </div>
+                </div>
+                <div class="profile-bio">
+                    <p>Master of animations and visual effects. Creating experiences that transcend reality.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Characters Grid -->
+        <section class="characters-section">
+            <div class="section-title">
+                <h2>Legendary Characters</h2>
+                <div class="title-underline"></div>
+            </div>
+            
+            <div class="characters-grid">
+                <!-- Cid Kagenou -->
+                <div class="character-card" data-character="cid">
+                    <div class="character-bg"></div>
+                    <div class="character-glow"></div>
+                    <div class="character-image">
+                        <img src="https://media.tenor.com/images/8014732483619404483/cid-kagenou.gif" alt="Cid Kagenou" class="character-img" loading="lazy" />
+                        <div class="image-shimmer"></div>
+                    </div>
+                    <div class="character-info">
+                        <h3 class="character-name">Cid Kagenou</h3>
+                        <p class="character-desc">The Eminence in Shadow</p>
+                        <div class="character-stats">
+                            <span class="stat-badge">Shadow</span>
+                            <span class="stat-badge">Mastermind</span>
+                        </div>
+                    </div>
+                    <div class="character-particles"></div>
+                </div>
+
+                <!-- Sakuta Azusagawa -->
+                <div class="character-card" data-character="sakuta">
+                    <div class="character-bg"></div>
+                    <div class="character-glow"></div>
+                    <div class="character-image">
+                        <img src="https://media.tenor.com/images/19735392/anime-sakuta-azusagawa.gif" alt="Sakuta Azusagawa" class="character-img" loading="lazy" />
+                        <div class="image-shimmer"></div>
+                    </div>
+                    <div class="character-info">
+                        <h3 class="character-name">Sakuta Azusagawa</h3>
+                        <p class="character-desc">Rascal Does Not Dream</p>
+                        <div class="character-stats">
+                            <span class="stat-badge">Adolescence</span>
+                            <span class="stat-badge">Syndrome</span>
+                        </div>
+                    </div>
+                    <div class="character-particles"></div>
+                </div>
+
+                <!-- Kirigaya Kirito -->
+                <div class="character-card" data-character="kirito">
+                    <div class="character-bg"></div>
+                    <div class="character-glow"></div>
+                    <div class="character-image">
+                        <img src="https://media.tenor.com/images/22905203/kirito-kirigaya-kazuto-kazuto-kirigaya-sword-art-online-sao.gif" alt="Kirigaya Kirito" class="character-img" loading="lazy" />
+                        <div class="image-shimmer"></div>
+                    </div>
+                    <div class="character-info">
+                        <h3 class="character-name">Kirigaya Kirito</h3>
+                        <p class="character-desc">Sword Art Online</p>
+                        <div class="character-stats">
+                            <span class="stat-badge">Dual Wield</span>
+                            <span class="stat-badge">Black Swordsman</span>
+                        </div>
+                    </div>
+                    <div class="character-particles"></div>
+                </div>
+
+                <!-- Nasa Tsukasa -->
+                <div class="character-card" data-character="nasa">
+                    <div class="character-bg"></div>
+                    <div class="character-glow"></div>
+                    <div class="character-image">
+                        <img src="https://media.tenor.com/images/21029874/tonikaku-kawaii-nasa-yuzaki-tsukasa-yuzaki-yukata-cute-anime.gif" alt="Nasa Tsukasa" class="character-img" loading="lazy" />
+                        <div class="image-shimmer"></div>
+                    </div>
+                    <div class="character-info">
+                        <h3 class="character-name">Nasa Tsukasa</h3>
+                        <p class="character-desc">Tonikaku Kawaii</p>
+                        <div class="character-stats">
+                            <span class="stat-badge">Genius</span>
+                            <span class="stat-badge">Romantic</span>
+                        </div>
+                    </div>
+                    <div class="character-particles"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Animated Showcase Section -->
+        <section class="showcase-section">
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <div class="showcase-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Performance optimized animations</p>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-icon">🎨</div>
+                    <h3>Visual Mastery</h3>
+                    <p>Stunning visual effects</p>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-icon">🔥</div>
+                    <h3>Epic Scale</h3>
+                    <p>200+ unique animations</p>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-icon">✨</div>
+                    <h3>Premium Quality</h3>
+                    <p>Cinematic experience</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Elements Section -->
+        <section class="elements-section">
+            <div class="element-cube cube-1"></div>
+            <div class="element-cube cube-2"></div>
+            <div class="element-cube cube-3"></div>
+            <div class="element-pyramid"></div>
+            <div class="element-sphere"></div>
+        </section>
+    </div>
+
+    <!-- Animated Background Elements -->
+    <div class="bg-elements">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+        <div class="bg-circle circle-4"></div>
+        <div class="bg-circle circle-5"></div>
+    </div>
+
+    <!-- Glowing Lines -->
+    <svg class="glow-lines" width="100%" height="100%">
+        <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#ff0080;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#00ff80;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#8000ff;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <path class="glow-line line-1" d="M0,100 Q250,50 500,100 T1000,100" />
+        <path class="glow-line line-2" d="M0,200 Q300,150 600,200 T1200,200" />
+        <path class="glow-line line-3" d="M0,300 Q200,250 400,300 T800,300" />
+    </svg>
+
+    <script src="main.js"></script>
+</body>
 </html>
